@@ -88,7 +88,14 @@ function App() {
           type="number"
         />
         <button
-          onClick={() => setSeed(10000 + Math.floor(Math.random() * 90000))}
+          onClick={() => {
+            const newSeed = 10000 + Math.floor(Math.random() * 90000);
+            setSeed(newSeed);
+            const { pathname } = location;
+            if (pathname.length > 1) {
+              push("/" + pathname.split("/")[1] + "/" + newSeed);
+            }
+          }}
         >
           New seed
         </button>
