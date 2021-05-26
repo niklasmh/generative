@@ -38,6 +38,8 @@ function Wrapper({
           height,
           webgl ? project.WEBGL : project.P2D
         );
+        const parent = document.getElementById(uniqueIDRef.current);
+        if (parent) parent.innerHTML = "";
         canvas.parent(uniqueIDRef.current);
         project.noLoop();
         project.angleMode(project.DEGREES);
