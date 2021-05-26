@@ -1,13 +1,7 @@
 import "./App.css";
 import * as Projects from "./projects";
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Link,
-  useParams,
-} from "react-router-dom";
-import { useState } from "react";
+import { Switch, Route, Link, useParams, useHistory } from "react-router-dom";
+import { useEffect, useState } from "react";
 
 function ProjectList({ seed }) {
   return (
@@ -22,7 +16,7 @@ function ProjectList({ seed }) {
               width: 190,
             }}
           >
-            <Link to={fromPascalCaseToKebab(project)}>
+            <Link to={fromPascalCaseToKebab(project) + "/" + seed}>
               <h3>{Project.prototype.name}</h3>
               <Project width={100} height={100} seed={seed} noDownload />
             </Link>
@@ -46,9 +40,15 @@ function fromKebabCaseToPascal(kebabCase) {
     .replace(/^[a-z]/i, (match) => match.toUpperCase());
 }
 
-function Project({ seed }) {
-  const { name } = useParams();
+function Project({ seed, setSeed = () => {} }) {
+  const { name, seed: URLSeed } = useParams();
   const pascalCaseName = fromKebabCaseToPascal(name);
+
+  useEffect(() => {
+    if (URLSeed && parseInt(URLSeed) !== seed) {
+      setSeed(parseInt(URLSeed));
+    }
+  }, [URLSeed]);
 
   if (!(pascalCaseName in Projects)) {
     return <div>Could not find project</div>;
@@ -68,7 +68,8 @@ function Project({ seed }) {
 }
 
 function App() {
-  const [seed, setSeed] = useState(Math.floor(Math.random() * 100000));
+  const [seed, setSeed] = useState(10000 + Math.floor(Math.random() * 90000));
+  const { push } = useHistory();
 
   return (
     <div className="App">
@@ -76,21 +77,31 @@ function App() {
         <span>Seed:</span>
         <input
           value={seed}
-          onChange={(e) => setSeed(parseInt(e.target.value))}
+          onChange={(e) => {
+            const newSeed = parseInt(e.target.value);
+            setSeed(newSeed);
+            const { pathname } = location;
+            if (pathname.length > 1) {
+              push("/" + pathname.split("/")[1] + "/" + newSeed);
+            }
+          }}
           type="number"
         />
+        <button
+          onClick={() => setSeed(10000 + Math.floor(Math.random() * 90000))}
+        >
+          New seed
+        </button>
       </div>
-      <Router>
-        <Switch>
-          <Route exact path="/">
-            <ProjectList seed={seed} />
-          </Route>
-          <Route path="/:name">
-            <Link to="/">Home</Link>
-            <Project seed={seed} />
-          </Route>
-        </Switch>
-      </Router>
+      <Switch>
+        <Route exact path="/">
+          <ProjectList seed={seed} />
+        </Route>
+        <Route path="/:name/:seed?">
+          <Link to="/">Home</Link>
+          <Project seed={seed} setSeed={(seed) => setSeed(seed)} />
+        </Route>
+      </Switch>
     </div>
   );
 }
