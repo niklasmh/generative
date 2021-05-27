@@ -68,8 +68,24 @@ function Project({ seed, setSeed = () => {} }) {
 }
 
 function App() {
-  const [seed, setSeed] = useState(10000 + Math.floor(Math.random() * 90000));
+  const [seed, setSeed] = useState(-1);
   const { push } = useHistory();
+
+  useEffect(() => {
+    if (seed === -1) {
+      const { pathname } = location;
+      const URLSeed = parseInt(pathname.split("/")[2]);
+      if (URLSeed) {
+        setSeed(URLSeed);
+      } else {
+        const newSeed = 10000 + Math.floor(Math.random() * 90000);
+        setSeed(newSeed);
+        if (pathname.length > 1) {
+          push("/" + pathname.split("/")[1] + "/" + newSeed);
+        }
+      }
+    }
+  }, [seed]);
 
   return (
     <div className="App">
@@ -106,7 +122,9 @@ function App() {
         </Route>
         <Route path="/:name/:seed?">
           <Link to="/">Home</Link>
-          <Project seed={seed} setSeed={(seed) => setSeed(seed)} />
+          {seed === -1 ? null : (
+            <Project seed={seed} setSeed={(seed) => setSeed(seed)} />
+          )}
         </Route>
       </Switch>
     </div>
