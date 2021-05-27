@@ -9,7 +9,7 @@ export class Projection {
   aspectRatio = 1;
   near = 100;
   far = 200;
-  scale = 10;
+  zoom = 10;
   fisheye = false;
 
   translate(x = 0, y = 0, z = 0) {
@@ -21,7 +21,7 @@ export class Projection {
     ]);
   }
 
-  scale(x = 0, y = 0, z = 0) {
+  scale(x = 1, y = 1, z = 1) {
     this.multiply([
       [x, 0, 0, 0],
       [0, y, 0, 0],
@@ -153,16 +153,12 @@ export class Projection {
                 Math.sqrt(point[0] * point[0] + point[1] * point[1])
             );
       return [
-        point[0] * this.scale * newDistRatio,
-        point[1] * this.scale * newDistRatio,
-        point[2] * this.scale,
+        point[0] * this.zoom * newDistRatio,
+        point[1] * this.zoom * newDistRatio,
+        point[2] * this.zoom,
       ];
     }
-    return [
-      point[0] * this.scale,
-      point[1] * this.scale,
-      point[2] * this.scale,
-    ];
+    return [point[0] * this.zoom, point[1] * this.zoom, point[2] * this.zoom];
   }
 
   point(...position) {

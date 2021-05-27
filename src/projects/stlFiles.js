@@ -9,7 +9,7 @@ function preload() {
 
 function draw() {
   proj.init();
-  proj.STLFiles = 3;
+  proj.fisheye = 3;
   proj.fov = 30;
   proj.rotateY(noise(1) * 90);
   proj.rotateX(-20 - noise(0, 1) * 90);
