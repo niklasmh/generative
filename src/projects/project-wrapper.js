@@ -112,7 +112,7 @@ function Wrapper({
         project.rect(100 - margin, 0, margin, 100);
         project.rect(0, (height / width) * 100 - margin, 100, margin);
         project.scale(1);
-        project.save(name + ".png");
+        project.save(name + "-" + seed + ".png");
       };
       project.draw = scaleDrawThenSave;
     };
