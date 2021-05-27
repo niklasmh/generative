@@ -5,4 +5,5 @@ export { Fisheye } from "./fisheye";
 export { InverseFisheye } from "./inverseFisheye";
 export { Lines } from "./lines";
 export { UnevenCircle } from "./unevenCircle";
+export { StlFiles } from "./stlFiles";
 export { Test } from "./test";

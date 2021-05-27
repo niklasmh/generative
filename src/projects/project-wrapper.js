@@ -16,6 +16,7 @@ function Wrapper({
   noDownload = false,
   name,
   draw,
+  preload = null,
   webgl = false,
   margin = 5,
   width = 500,
@@ -31,6 +32,20 @@ function Wrapper({
   const sketch = useCallback(
     (project) => {
       projectRef.current = project;
+
+      Object.keys(project.__proto__)
+        .filter((key) => key.charAt(0) !== "_")
+        .forEach(
+          (key) =>
+            (window[key] =
+              typeof project.__proto__[key] === "function"
+                ? project.__proto__[key].bind(project)
+                : project.__proto__[key])
+        );
+
+      if (preload) {
+        project.preload = preload.bind(project);
+      }
 
       project.setup = () => {
         const canvas = project.createCanvas(
@@ -78,6 +93,20 @@ function Wrapper({
   const generatePrint = useCallback(() => {
     const sketch = (project) => {
       projectRef.current = project;
+
+      Object.keys(project.__proto__)
+        .filter((key) => key.charAt(0) !== "_")
+        .forEach(
+          (key) =>
+            (window[key] =
+              typeof project.__proto__[key] === "function"
+                ? project.__proto__[key].bind(project)
+                : project.__proto__[key])
+        );
+
+      if (preload) {
+        project.preload = preload.bind(project);
+      }
 
       project.setup = () => {
         const canvas = project.createCanvas(
