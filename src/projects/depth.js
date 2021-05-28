@@ -86,4 +86,4 @@ export function Depth({ ...props }) {
 }
 
 Depth.prototype.name = name;
-Depth.prototype.description = "Make it possible to 'draw' in 3D";
+Depth.prototype.category = "finished";

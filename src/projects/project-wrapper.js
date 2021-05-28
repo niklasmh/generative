@@ -19,7 +19,7 @@ function Project({
   draw,
   preload = null,
   webgl = false,
-  margin = 5,
+  margin = 0,
   width = 500,
   height = 500,
   finalWidth = 8000,
@@ -159,7 +159,7 @@ function Project({
       <div
         id={uniqueIDRef.current}
         ref={canvasContainerRef}
-        title="Click to download"
+        title={noDownload ? "" : "Click to download"}
         style={{ cursor: "pointer" }}
         onClick={() => noDownload || generatePrint()}
       ></div>

@@ -23,3 +23,4 @@ export function InverseFisheye({ ...props }) {
 InverseFisheye.prototype.name = name;
 InverseFisheye.prototype.description =
   "Make it possible to 'draw' in inverse fisheye 3D";
+InverseFisheye.prototype.category = "finished";

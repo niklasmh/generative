@@ -27,4 +27,6 @@ export function Contrasts({ ...props }) {
 }
 
 Contrasts.prototype.name = name;
-Contrasts.prototype.description = "Multiple layers causing different contrasts";
+Contrasts.prototype.description =
+  "Multiple layers making it look like a soft material";
+Contrasts.prototype.category = "finished";

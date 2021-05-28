@@ -75,3 +75,4 @@ export function NorwegianFlag({ ...props }) {
 
 const name = "Norwegian flag";
 NorwegianFlag.prototype.name = name;
+NorwegianFlag.prototype.category = "finished";

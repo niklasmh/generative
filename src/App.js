@@ -4,28 +4,49 @@ import { Switch, Route, Link, useParams, useHistory } from "react-router-dom";
 import { useEffect, useState } from "react";
 
 function ProjectList({ seed }) {
+  const isFinished = (project) =>
+    /finished/.test(Projects[project].prototype.category || "");
   return (
-    <div style={{ display: "flex", flexFlow: "row wrap" }}>
-      {Object.keys(Projects)
-        .filter((project) => project !== "Project")
-        .map((project) => {
-          const Project = Projects[project];
-          return (
-            <div
-              key={project}
-              style={{
-                margin: 16,
-                width: 190,
-              }}
-            >
-              <Link to={fromPascalCaseToKebab(project) + "/" + seed}>
-                <h3>{Project.prototype.name}</h3>
-                <Project width={100} height={100} seed={seed} noDownload />
-              </Link>
-            </div>
-          );
-        })}
-    </div>
+    <>
+      <h1 className="title">Finished</h1>
+      <div className="list">
+        {Object.keys(Projects)
+          .filter((project) => project !== "Project")
+          .filter(isFinished)
+          .map((project) => {
+            const Project = Projects[project];
+            return (
+              <div key={project} className="list-element">
+                <Link to={fromPascalCaseToKebab(project) + "/" + seed}>
+                  <span className="list-element-name">
+                    {Project.prototype.name}
+                  </span>
+                  <Project width={160} height={160} seed={seed} noDownload />
+                </Link>
+              </div>
+            );
+          })}
+      </div>
+      <h1 className="title">Experimental</h1>
+      <div className="list">
+        {Object.keys(Projects)
+          .filter((project) => project !== "Project")
+          .filter((project) => !isFinished(project))
+          .map((project) => {
+            const Project = Projects[project];
+            return (
+              <div key={project} className="list-element">
+                <Link to={fromPascalCaseToKebab(project) + "/" + seed}>
+                  <span className="list-element-name">
+                    {Project.prototype.name}
+                  </span>
+                  <Project width={160} height={160} seed={seed} noDownload />
+                </Link>
+              </div>
+            );
+          })}
+      </div>
+    </>
   );
 }
 

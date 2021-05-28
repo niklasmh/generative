@@ -22,3 +22,4 @@ export function Fisheye({ ...props }) {
 
 Fisheye.prototype.name = name;
 Fisheye.prototype.description = "Make it possible to 'draw' in fisheye 3D";
+Fisheye.prototype.category = "finished";

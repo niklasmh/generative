@@ -9,7 +9,7 @@ function draw() {
   proj.far = 1;
   proj.near = -1;
   proj.translate(0, 0, 5);
-  proj.rotateZ(noise(1) * 180);
+  proj.rotateZ(noise(1) * 180 - 90);
   proj.rotateX(noise(0, 1) * 90);
 
   const points = [];
@@ -50,3 +50,4 @@ export function CurvedFlatSurface({ ...props }) {
 
 const name = "Curved flat surface";
 CurvedFlatSurface.prototype.name = name;
+CurvedFlatSurface.prototype.category = "finished";
