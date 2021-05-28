@@ -89,33 +89,35 @@ function App() {
 
   return (
     <div className="App">
-      <div className="seed">
-        <span>Seed:</span>
-        <input
-          value={seed}
-          onChange={(e) => {
-            const newSeed = parseInt(e.target.value);
-            setSeed(newSeed);
-            const { pathname } = location;
-            if (pathname.length > 1) {
-              push("/" + pathname.split("/")[1] + "/" + newSeed);
-            }
-          }}
-          type="number"
-        />
-        <button
-          onClick={() => {
-            const newSeed = 10000 + Math.floor(Math.random() * 90000);
-            setSeed(newSeed);
-            const { pathname } = location;
-            if (pathname.length > 1) {
-              push("/" + pathname.split("/")[1] + "/" + newSeed);
-            }
-          }}
-        >
-          New seed
-        </button>
-      </div>
+      {seed === -1 ? null : (
+        <div className="seed">
+          <span>Seed:</span>
+          <input
+            value={seed}
+            onChange={(e) => {
+              const newSeed = parseInt(e.target.value);
+              setSeed(newSeed);
+              const { pathname } = location;
+              if (pathname.length > 1) {
+                push("/" + pathname.split("/")[1] + "/" + newSeed);
+              }
+            }}
+            type="number"
+          />
+          <button
+            onClick={() => {
+              const newSeed = 10000 + Math.floor(Math.random() * 90000);
+              setSeed(newSeed);
+              const { pathname } = location;
+              if (pathname.length > 1) {
+                push("/" + pathname.split("/")[1] + "/" + newSeed);
+              }
+            }}
+          >
+            New seed
+          </button>
+        </div>
+      )}
       <Switch>
         <Route exact path="/">
           <ProjectList seed={seed} />
