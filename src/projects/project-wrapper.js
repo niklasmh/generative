@@ -28,7 +28,10 @@ function Project({
   const canvasContainerRef = useRef();
   const printCanvasContainerRef = useRef();
   const projectRef = useRef();
-  console.log("Seed:", seed);
+
+  useEffect(() => {
+    if (seed !== -1) console.log("Seed:", seed);
+  }, [seed]);
 
   const sketch = useCallback(
     (project) => {
