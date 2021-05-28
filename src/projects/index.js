@@ -1,4 +1,5 @@
 export { ClosedBezier } from "./closedBezier";
+export { CurvedFlatSurface } from "./curvedFlatSurface";
 export { Contrasts } from "./contrasts";
 export { Depth } from "./depth";
 export { Fisheye } from "./fisheye";

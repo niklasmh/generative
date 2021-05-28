@@ -1,5 +1,6 @@
 import p5 from "p5";
 import { useCallback, useEffect, useRef } from "react";
+import { Projection } from "../utils/projection";
 
 function useRenderSketch(sketch, canvasContainer, seed) {
   useEffect(() => {
@@ -60,7 +61,7 @@ function Wrapper({
         project.angleMode(project.DEGREES);
       };
 
-      const scaleDraw = (...args) => {
+      const scaleDraw = () => {
         if (seed >= 0) project.noiseSeed(seed);
         project.scale(width / 100);
         project.translate(50, 50);
@@ -73,7 +74,8 @@ function Wrapper({
                   ? project.__proto__[key].bind(project)
                   : project.__proto__[key])
           );
-        draw.bind(project)(...args);
+        window.proj = new Projection();
+        draw.bind(project)();
         project.translate(-50, -50);
         project.fill(255);
         project.noStroke();
@@ -119,7 +121,7 @@ function Wrapper({
         project.angleMode(project.DEGREES);
       };
 
-      const scaleDrawThenSave = (...args) => {
+      const scaleDrawThenSave = () => {
         if (seed >= 0) project.noiseSeed(seed);
         project.scale(finalWidth / 100);
         project.translate(50, 50);
@@ -132,7 +134,8 @@ function Wrapper({
                   ? project.__proto__[key].bind(project)
                   : project.__proto__[key])
           );
-        draw.bind(project)(...args);
+        window.proj = new Projection();
+        draw.bind(project)();
         project.translate(-50, -50);
         project.fill(255);
         project.noStroke();

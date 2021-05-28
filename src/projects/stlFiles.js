@@ -28,7 +28,7 @@ function stl(points) {
     stroke(z - 30);
   };
   points.forEach((p) => {
-    const [x, y, z] = proj.point3d(...p);
+    const [x, y, z] = proj.point(...p);
     beforeDraw(z);
     point(x, y);
   });
