@@ -1,17 +1,14 @@
 import { Project } from ".";
-import { Projection } from "../utils/projection";
-
-const proj = new Projection();
 
 function preload() {
   window.data = this.loadModel("/cube.stl");
 }
 
 function draw() {
-  proj.fisheye = 3;
+  proj.lens = (point) => proj.fisheyeLens(point, 30);
   proj.fov = 30;
   proj.rotateY(noise(1) * 90);
-  proj.rotateX(-20 - noise(0, 1) * 90);
+  proj.rotateX(noise(0, 1) * 90);
   proj.translate(0, 0, 30);
 
   const points = data.vertices.map(({ x, y, z }) => [x, y, z]);
@@ -23,8 +20,8 @@ function draw() {
 
 function stl(points) {
   const beforeDraw = (z) => {
-    strokeWeight((z - 30) / 40);
-    stroke(z - 30);
+    strokeWeight(z * 100);
+    stroke(z * 10000);
   };
   points.forEach((p) => {
     const [x, y, z] = proj.point(...p);
