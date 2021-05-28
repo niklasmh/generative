@@ -6,23 +6,25 @@ import { useEffect, useState } from "react";
 function ProjectList({ seed }) {
   return (
     <div style={{ display: "flex", flexFlow: "row wrap" }}>
-      {Object.keys(Projects).map((project) => {
-        const Project = Projects[project];
-        return (
-          <div
-            key={project}
-            style={{
-              margin: 16,
-              width: 190,
-            }}
-          >
-            <Link to={fromPascalCaseToKebab(project) + "/" + seed}>
-              <h3>{Project.prototype.name}</h3>
-              <Project width={100} height={100} seed={seed} noDownload />
-            </Link>
-          </div>
-        );
-      })}
+      {Object.keys(Projects)
+        .filter((project) => project !== "Project")
+        .map((project) => {
+          const Project = Projects[project];
+          return (
+            <div
+              key={project}
+              style={{
+                margin: 16,
+                width: 190,
+              }}
+            >
+              <Link to={fromPascalCaseToKebab(project) + "/" + seed}>
+                <h3>{Project.prototype.name}</h3>
+                <Project width={100} height={100} seed={seed} noDownload />
+              </Link>
+            </div>
+          );
+        })}
     </div>
   );
 }

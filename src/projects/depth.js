@@ -1,4 +1,4 @@
-import Project from "./project-wrapper";
+import { Project } from ".";
 
 function draw() {
   proj.fisheye = false;

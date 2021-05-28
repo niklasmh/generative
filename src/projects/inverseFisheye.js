@@ -1,4 +1,4 @@
-import Project from "./project-wrapper";
+import { Project } from ".";
 import { spiral, cube } from "./Depth";
 
 function draw() {

@@ -1,4 +1,4 @@
-import Project from "./project-wrapper";
+import { Project } from ".";
 import { Projection } from "../utils/projection";
 
 const proj = new Projection();
