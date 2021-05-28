@@ -11,6 +11,7 @@ export class Projection {
   near = -1;
   zoom = 10;
   lens = null;
+  map = null;
   setZToSize = true; // Make Z-axis act as point size on screen
   projection = this.getProjection();
 
@@ -27,6 +28,7 @@ export class Projection {
     this.near = -1;
     this.zoom = 10;
     this.lens = null;
+    this.map = null;
     this.setZToSize = true; // Make Z-axis act as point size on screen
     this.projection = this.getProjection();
   }
@@ -159,17 +161,23 @@ export class Projection {
 
   point(x, y, z) {
     const point = this.multiply(this.projection, false, [x, y, z, 1], true);
+    if (this.map) {
+      const [newX, newY, newZ] = this.map(point);
+      point[0] = newX;
+      point[1] = newY;
+      point[2] = newZ;
+    }
     if (this.setZToSize) {
       point[2] = this.pointToSize(...point);
     }
     if (this.lens) {
       return this.lens([
-        point[0] * this.zoom,
+        -point[0] * this.zoom,
         point[1] * this.zoom,
         point[2] * this.zoom,
       ]);
     }
-    return [point[0] * this.zoom, point[1] * this.zoom, point[2] * this.zoom];
+    return [-point[0] * this.zoom, point[1] * this.zoom, point[2] * this.zoom];
   }
 
   // Get the perceived size by distance
