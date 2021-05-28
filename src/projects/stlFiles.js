@@ -8,7 +8,6 @@ function preload() {
 }
 
 function draw() {
-  proj.init();
   proj.fisheye = 3;
   proj.fov = 30;
   proj.rotateY(noise(1) * 90);

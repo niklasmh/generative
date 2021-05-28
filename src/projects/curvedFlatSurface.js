@@ -6,7 +6,6 @@ const proj = new Projection();
 function draw() {
   background(0);
 
-  proj.init();
   proj.lens = (point) => proj.fisheyeLens(point, 30);
   proj.setZToSize = true;
   proj.fov = 90;

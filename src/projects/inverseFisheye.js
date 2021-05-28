@@ -2,7 +2,6 @@ import Project from "./project-wrapper";
 import { spiral, cube } from "./depth";
 
 function draw() {
-  proj.init();
   proj.lens = (point) => proj.fisheyeLens(point, -30);
   proj.fov = 30;
   proj.translate(0, -100, 0);

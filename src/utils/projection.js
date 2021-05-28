@@ -12,22 +12,22 @@ export class Projection {
   zoom = 10;
   lens = null;
   setZToSize = true; // Make Z-axis act as point size on screen
-  projection = this.getProjection();
+  projection = this.matrix;
 
-  init() {
+  constructor(settings = {}) {
     this.matrix = [
       [1, 0, 0, 0],
       [0, 1, 0, 0],
       [0, 0, 1, 0],
       [0, 0, 0, 1],
     ];
-    this.fov = 45;
-    this.aspectRatio = 1;
-    this.far = 1;
-    this.near = -1;
-    this.zoom = 10;
-    this.lens = null;
-    this.setZToSize = true; // Make Z-axis act as point size on screen
+    this.fov = settings.fov ?? 45;
+    this.aspectRatio = settings.aspectRatio ?? 1;
+    this.far = settings.far ?? 1;
+    this.near = settings.near ?? -1;
+    this.zoom = settings.zoom ?? 10;
+    this.lens = settings.lens ?? null;
+    this.setZToSize = settings.setZToSize ?? true; // Make Z-axis act as point size on screen
     this.projection = this.getProjection();
   }
 

@@ -1,7 +1,6 @@
 import Project from "./project-wrapper";
 
 function draw() {
-  proj.init();
   proj.fisheye = false;
   proj.fov = 30;
   proj.translate(0, -100, 0);
