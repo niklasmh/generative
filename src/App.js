@@ -8,7 +8,7 @@ function ProjectList({ seed }) {
     /finished/.test(Projects[project].prototype.category || "");
   return (
     <>
-      <h1 className="title">Finished</h1>
+      <h1 className="title">Finished projects</h1>
       <div className="list">
         {Object.keys(Projects)
           .filter((project) => project !== "Project")
@@ -21,7 +21,7 @@ function ProjectList({ seed }) {
                   <span className="list-element-name">
                     {Project.prototype.name}
                   </span>
-                  <Project width={160} height={160} seed={seed} noDownload />
+                  <Project width={200} height={200} seed={seed} noDownload />
                 </Link>
               </div>
             );
@@ -40,7 +40,7 @@ function ProjectList({ seed }) {
                   <span className="list-element-name">
                     {Project.prototype.name}
                   </span>
-                  <Project width={160} height={160} seed={seed} noDownload />
+                  <Project width={200} height={200} seed={seed} noDownload />
                 </Link>
               </div>
             );
