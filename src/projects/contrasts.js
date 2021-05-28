@@ -20,7 +20,7 @@ function draw() {
   }
 }
 
-const name = "Contast";
+const name = "Contrast";
 
 export function Contrasts({ ...props }) {
   return <Project name={name} draw={draw} {...props} />;
