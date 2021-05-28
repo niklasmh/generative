@@ -1,5 +1,5 @@
 import Project from "./project-wrapper";
-import { spiral, cube } from "./depth";
+import { spiral, cube } from "./Depth";
 
 function draw() {
   proj.lens = (point) => proj.fisheyeLens(point, -30);

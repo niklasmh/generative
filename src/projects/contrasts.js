@@ -1,5 +1,5 @@
 import Project from "./project-wrapper";
-import { closedBezierFunction } from "./closedBezier";
+import { closedBezierFunction } from "./ClosedBezier";
 
 function draw() {
   background(0);
