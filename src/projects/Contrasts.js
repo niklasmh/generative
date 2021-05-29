@@ -1,4 +1,4 @@
-import { Project } from ".";
+import { ProjectWrapper } from ".";
 import { closedBezierFunction } from "./ClosedBezier";
 
 function draw() {
@@ -22,11 +22,11 @@ function draw() {
 
 const name = "Contrast";
 
-export function Contrasts({ ...props }) {
-  return <Project name={name} draw={draw} {...props} />;
+export function Project({ ...props }) {
+  return <ProjectWrapper name={name} draw={draw} {...props} />;
 }
 
-Contrasts.prototype.name = name;
-Contrasts.prototype.description =
+Project.prototype.name = name;
+Project.prototype.description =
   "Multiple layers making it look like a soft material";
-Contrasts.prototype.category = "finished";
+Project.prototype.category = "finished";

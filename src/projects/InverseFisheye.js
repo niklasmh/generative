@@ -1,4 +1,4 @@
-import { Project } from ".";
+import { ProjectWrapper } from ".";
 import { spiral, cube } from "./Depth";
 
 function draw() {
@@ -16,11 +16,11 @@ function draw() {
 
 const name = "Inverse fisheye";
 
-export function InverseFisheye({ ...props }) {
-  return <Project name={name} draw={draw} {...props} />;
+export function Project({ ...props }) {
+  return <ProjectWrapper name={name} draw={draw} {...props} />;
 }
 
-InverseFisheye.prototype.name = name;
-InverseFisheye.prototype.description =
+Project.prototype.name = name;
+Project.prototype.description =
   "Make it possible to 'draw' in inverse fisheye 3D";
-InverseFisheye.prototype.category = "finished";
+Project.prototype.category = "finished";

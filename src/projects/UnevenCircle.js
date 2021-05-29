@@ -1,4 +1,4 @@
-import { Project } from ".";
+import { ProjectWrapper } from ".";
 import { closedBezierFunction } from "./ClosedBezier";
 
 function draw() {
@@ -35,9 +35,9 @@ function draw() {
 
 const name = "Uneven circle";
 
-export function UnevenCircle({ ...props }) {
-  return <Project name={name} draw={draw} {...props} />;
+export function Project({ ...props }) {
+  return <ProjectWrapper name={name} draw={draw} {...props} />;
 }
 
-UnevenCircle.prototype.name = name;
-UnevenCircle.prototype.description = "Uneven circle with uneven stripes";
+Project.prototype.name = name;
+Project.prototype.description = "Uneven circle with uneven stripes";

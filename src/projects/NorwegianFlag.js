@@ -1,4 +1,4 @@
-import { Project } from ".";
+import { ProjectWrapper } from ".";
 import { dottedBox, union } from "../utils/generator";
 
 function draw() {
@@ -69,10 +69,10 @@ function draw() {
   });
 }
 
-export function NorwegianFlag({ ...props }) {
-  return <Project name={name} draw={draw} {...props} />;
+export function Project({ ...props }) {
+  return <ProjectWrapper name={name} draw={draw} {...props} />;
 }
 
 const name = "Norwegian flag";
-NorwegianFlag.prototype.name = name;
-NorwegianFlag.prototype.category = "finished";
+Project.prototype.name = name;
+Project.prototype.category = "finished";

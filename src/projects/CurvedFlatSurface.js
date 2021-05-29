@@ -1,4 +1,4 @@
-import { Project } from ".";
+import { ProjectWrapper } from ".";
 
 function draw() {
   background(0);
@@ -44,10 +44,10 @@ function draw() {
   });
 }
 
-export function CurvedFlatSurface({ ...props }) {
-  return <Project name={name} draw={draw} {...props} />;
+export function Project({ ...props }) {
+  return <ProjectWrapper name={name} draw={draw} {...props} />;
 }
 
 const name = "Curved flat surface";
-CurvedFlatSurface.prototype.name = name;
-CurvedFlatSurface.prototype.category = "finished";
+Project.prototype.name = name;
+Project.prototype.category = "finished";

@@ -12,7 +12,7 @@ function useRenderSketch(sketch, canvasContainer, seed) {
   }, [sketch, canvasContainer, seed]);
 }
 
-function Project({
+function ProjectWrapper({
   seed = -1,
   noDownload = false,
   name,
@@ -172,4 +172,4 @@ function Project({
   );
 }
 
-export { Project };
+export { ProjectWrapper };

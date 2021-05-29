@@ -1,4 +1,4 @@
-import { Project } from ".";
+import { ProjectWrapper } from ".";
 
 function draw() {
   proj.fisheye = false;
@@ -81,9 +81,9 @@ export function spiral() {
 
 const name = "Depth test";
 
-export function Depth({ ...props }) {
-  return <Project name={name} draw={draw} {...props} />;
+export function Project({ ...props }) {
+  return <ProjectWrapper name={name} draw={draw} {...props} />;
 }
 
-Depth.prototype.name = name;
-Depth.prototype.category = "finished";
+Project.prototype.name = name;
+Project.prototype.category = "finished";

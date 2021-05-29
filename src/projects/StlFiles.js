@@ -1,4 +1,4 @@
-import { Project } from ".";
+import { ProjectWrapper } from ".";
 
 function preload() {
   window.data = this.loadModel("/cube.stl");
@@ -30,10 +30,12 @@ function stl(points) {
   });
 }
 
-export function StlFiles({ ...props }) {
-  return <Project name={name} draw={draw} preload={preload} {...props} />;
+export function Project({ ...props }) {
+  return (
+    <ProjectWrapper name={name} draw={draw} preload={preload} {...props} />
+  );
 }
 
 const name = "STLFile vertices";
-StlFiles.prototype.name = name;
-StlFiles.prototype.description = "Render vertices from STLFiles";
+Project.prototype.name = name;
+Project.prototype.description = "Render vertices from STLFiles";

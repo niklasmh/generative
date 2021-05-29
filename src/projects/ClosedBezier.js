@@ -1,4 +1,4 @@
-import { Project } from ".";
+import { ProjectWrapper } from ".";
 
 export const closedBezierFunction = (points) => {
   beginShape();
@@ -24,8 +24,8 @@ function draw() {
 
 const name = "Closed bezier curve";
 
-export function ClosedBezier({ ...props }) {
-  return <Project name={name} draw={draw} {...props} />;
+export function Project({ ...props }) {
+  return <ProjectWrapper name={name} draw={draw} {...props} />;
 }
 
-ClosedBezier.prototype.name = name;
+Project.prototype.name = name;

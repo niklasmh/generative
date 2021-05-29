@@ -1,13 +1,13 @@
-export { ClosedBezier } from "./ClosedBezier";
-export { Contrasts } from "./Contrasts";
-export { CurvedFlatSurface } from "./CurvedFlatSurface";
-export { Depth } from "./Depth";
-export { Fisheye } from "./Fisheye";
-export { InverseFisheye } from "./InverseFisheye";
-export { Lines } from "./Lines";
-export { NorwegianFlag } from "./NorwegianFlag";
-export { UnevenCircle } from "./UnevenCircle";
-export { StlFiles } from "./StlFiles";
-export { Test } from "./Test";
+export { Project as ClosedBezier } from "./ClosedBezier";
+export { Project as Contrasts } from "./Contrasts";
+export { Project as CurvedFlatSurface } from "./CurvedFlatSurface";
+export { Project as Depth } from "./Depth";
+export { Project as Fisheye } from "./Fisheye";
+export { Project as InverseFisheye } from "./InverseFisheye";
+export { Project as Lines } from "./Lines";
+export { Project as NorwegianFlag } from "./NorwegianFlag";
+export { Project as UnevenCircle } from "./UnevenCircle";
+export { Project as StlFiles } from "./StlFiles";
+export { Project as Test } from "./Test";
 
-export { Project } from "./project-wrapper";
+export { ProjectWrapper } from "./project-wrapper";

@@ -1,4 +1,4 @@
-import { Project } from ".";
+import { ProjectWrapper } from ".";
 
 function draw() {
   background(0);
@@ -12,8 +12,8 @@ function draw() {
 
 const name = "Lines";
 
-export function Lines({ ...props }) {
-  return <Project name={name} draw={draw} {...props} />;
+export function Project({ ...props }) {
+  return <ProjectWrapper name={name} draw={draw} {...props} />;
 }
 
-Lines.prototype.name = name;
+Project.prototype.name = name;

@@ -11,7 +11,7 @@ function ProjectList({ seed }) {
       <h1 className="title">Finished</h1>
       <div className="list">
         {Object.keys(Projects)
-          .filter((project) => project !== "Project")
+          .filter((project) => project !== "ProjectWrapper")
           .filter(isFinished)
           .map((project) => {
             const Project = Projects[project];
@@ -30,7 +30,7 @@ function ProjectList({ seed }) {
       <h1 className="title">Experimental</h1>
       <div className="list">
         {Object.keys(Projects)
-          .filter((project) => project !== "Project")
+          .filter((project) => project !== "ProjectWrapper")
           .filter((project) => !isFinished(project))
           .map((project) => {
             const Project = Projects[project];
