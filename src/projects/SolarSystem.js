@@ -17,10 +17,10 @@ function draw() {
   background(0);
   sort(
     union([
-      sun(),
-      planet(2, -280, 0.3, [0, 255, 0], 50, 8),
-      planet(3, -45, 0.3, [0, 255, 255], 50, 9),
-      planet(3.7, -140, 0.5, [100, 100, 100], 50, 18),
+      sun(1, [255, 200, 120], 190, 5),
+      planet(2, -280, 0.3, [0, 255, 0], 50, 30),
+      planet(3, -45, 0.3, [0, 255, 255], 50, 30),
+      planet(3.7, -140, 0.5, [100, 100, 100], 50, 30),
     ])
   ).forEach(([x, y, _, color, pointSize]) => {
     strokeWeight(pointSize);
@@ -29,15 +29,21 @@ function draw() {
   });
 }
 
-function sun() {
+function sun(radius, color, details, dotSize) {
   stroke(255, 255, 0);
-  return mapTo3D(dottedSphere(0, 0, 0, 1, 80), true).map(
+  return mapTo3D(dottedSphere(0, 0, 0, radius, details), true).map(
     ([x, y, size, ox, oy, oz]) => {
       const s = 2;
       const o = 10;
-      const color =
-        255 * size * 20 * noise(s * (ox + o), s * (oy + o), s * (oz + o));
-      return [x, y, size, [color, color * 0.8, color * 0.4], size * 16];
+      const depth = noise(s * (ox + o), s * (oy + o), s * (oz + o));
+      const colorScale = size * 20 * depth;
+      return [
+        x * (1 + depth / 10),
+        y * (1 + depth / 10),
+        size,
+        [colorScale * color[0], colorScale * color[1], colorScale * color[2]],
+        size * dotSize,
+      ];
     }
   );
 }
@@ -67,7 +73,7 @@ function planet(distance, angle, radius, color, details = 50, dotSize = 10) {
           y,
           size,
           [color[0] * scale, color[1] * scale, color[2] * scale],
-          size * dotSize,
+          size * dotSize * radius,
         ];
       }
     ),
