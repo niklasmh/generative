@@ -96,6 +96,7 @@ function ProjectWrapper({
   useRenderSketch(sketch, canvasContainerRef.current, seed);
 
   const generatePrint = useCallback(() => {
+    console.log("Generating image ...");
     const sketch = (project) => {
       projectRef.current = project;
 
@@ -147,7 +148,9 @@ function ProjectWrapper({
         project.rect(100 - margin, 0, margin, 100);
         project.rect(0, (height / width) * 100 - margin, 100, margin);
         project.scale(1);
+        console.log("Saving image ...");
         project.save(name + "-" + seed + ".png");
+        console.log("Ferdig!");
       };
       project.draw = scaleDrawThenSave;
     };
