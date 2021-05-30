@@ -29,4 +29,4 @@ export function Project({ ...props }) {
 Project.prototype.name = name;
 Project.prototype.description =
   "Multiple layers making it look like a soft material";
-Project.prototype.category = "finished";
+Project.prototype.finished = true;

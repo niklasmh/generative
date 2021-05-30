@@ -23,4 +23,4 @@ export function Project({ ...props }) {
 Project.prototype.name = name;
 Project.prototype.description =
   "Make it possible to 'draw' in inverse fisheye 3D";
-Project.prototype.category = "finished";
+Project.prototype.finished = true;

@@ -50,4 +50,4 @@ export function Project({ ...props }) {
 
 const name = "Curved flat surface";
 Project.prototype.name = name;
-Project.prototype.category = "finished";
+Project.prototype.finished = true;

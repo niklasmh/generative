@@ -4,8 +4,7 @@ import { Switch, Route, Link, useParams, useHistory } from "react-router-dom";
 import { useEffect, useState } from "react";
 
 function ProjectList({ seed }) {
-  const isFinished = (project) =>
-    /finished/.test(Projects[project].prototype.category || "");
+  const isFinished = (project) => !!Projects[project].prototype.finished;
   return (
     <>
       <h1 className="title">Showcase</h1>
