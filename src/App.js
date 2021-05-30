@@ -8,7 +8,7 @@ function ProjectList({ seed }) {
     /finished/.test(Projects[project].prototype.category || "");
   return (
     <>
-      <h1 className="title">Finished</h1>
+      <h1 className="title">Showcase</h1>
       <div className="list">
         {Object.keys(Projects)
           .filter((project) => project !== "ProjectWrapper")
