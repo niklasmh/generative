@@ -1,23 +1,59 @@
 import { ProjectWrapper } from ".";
-import { dottedSphere, sort, union, mapTo3D } from "../utils/generator";
+import {
+  dottedSphere,
+  sort,
+  mapTo3D,
+  drawLayer,
+  newLayer,
+} from "../utils/generator";
 
 function draw() {
-  proj.fov = 30;
   proj.lens = (point) => proj.fisheyeLens(point, 90);
+  proj.fov = 30;
   proj.rotateZ(noise(1) * 360);
   proj.rotateX(45);
   proj.translate(0, 0, 3);
 
-  const details = Math.sqrt(this.width / 500);
+  const details = Math.sqrt(Math.min(500, this.width) / 500);
 
   background(0);
-  sort(union([planet(1, 400 * details, 5 / details / 4)])).forEach(
-    ([x, y, _, color, pointSize]) => {
-      strokeWeight(pointSize);
-      stroke(...color);
-      point(x, y);
-    }
-  );
+
+  const blur1 = newLayer(this.width);
+  const blur2 = newLayer(this.width);
+  const blur3 = newLayer(this.width);
+  const blur4 = newLayer(this.width);
+  const topLayer = newLayer(this.width);
+
+  const pointWithBlur = (x, y, size, color, blur = 0) => {
+    const blurStep = (size * 1000) / (blur * blur);
+    blur4.strokeWeight(size + blur * 0.25);
+    blur4.stroke(...color);
+    blur4.point(x, y);
+    blur3.strokeWeight(size + blur * 0.5);
+    blur3.stroke(...color);
+    blur3.point(x, y);
+    blur2.strokeWeight(size + blur * 0.75);
+    blur2.stroke(...color);
+    blur2.point(x, y);
+    blur1.strokeWeight(size + blur);
+    blur1.stroke(...color);
+    blur1.point(x, y);
+    topLayer.strokeWeight(size + blur * 0.1);
+    topLayer.stroke(...color, blurStep);
+    topLayer.point(x, y);
+  };
+
+  const points = sort(planet(1, 400 * details, 1));
+  points.forEach(([x, y, size, color, pointSize]) => {
+    const blur = Math.abs(size - 0.16) * 30;
+    pointWithBlur(x, y, pointSize, color, blur);
+  });
+
+  drawLayer(blur4, this.width, 0.05);
+  drawLayer(blur3, this.width, 0.05);
+  drawLayer(blur2, this.width, 0.05);
+  drawLayer(blur1, this.width, 0.05);
+  drawLayer(topLayer, this.width);
 }
 
 function planet(radius, details, dotSize) {

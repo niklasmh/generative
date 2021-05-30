@@ -108,3 +108,17 @@ export const dottedSphere = (
     })
     .flat();
 };
+
+export const newLayer = (width) => {
+  const layer = createGraphics(width, width);
+  layer.scale(width / 100);
+  layer.translate(50, 50);
+  return layer;
+};
+
+export const drawLayer = (layer, width, opacity = 1) => {
+  tint(255, 255 * opacity);
+  scale(100 / width);
+  image(layer, (-50 * width) / 100, (-50 * width) / 100, width, width);
+  scale(width / 100);
+};
