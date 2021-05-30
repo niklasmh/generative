@@ -10,6 +10,7 @@ import {
 
 function draw() {
   proj.fov = 30;
+  proj.lens = (point) => proj.fisheyeLens(point, 90);
   proj.rotateZ(noise(1) * 360);
   proj.rotateX(45);
   proj.translate(0, 1, 5);
