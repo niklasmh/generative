@@ -63,7 +63,7 @@ function planet(distance, angle, radius, color, details = 50, dotSize = 10) {
 
   return union([
     mapTo3D(dottedCircle(0, 0, distance, steps)).map(([x, y, size]) => {
-      const color = 100;
+      const color = 160;
       return [x, y, size, [color, color, color], size * 1];
     }),
     mapTo3D(dottedSphere(x0, y0, 0, radius, details), true).map(
