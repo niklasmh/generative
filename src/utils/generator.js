@@ -1,4 +1,6 @@
-function range(a, b, step = 1) {
+import { Project } from "../projects/ClosedBezier";
+
+export function range(a, b, step = 1) {
   const numbers = [];
   if (a > b) {
     for (let number = a; number < b; number += step) {
@@ -15,6 +17,18 @@ function range(a, b, step = 1) {
 export const union = (pointArrays) => {
   return pointArrays.flat();
 };
+
+export const sort = (points, ascending = true, dim = 2) => {
+  if (ascending) {
+    return points.sort((a, b) => a[dim] - b[dim]);
+  }
+  return points.sort((a, b) => b[dim] - a[dim]);
+};
+
+export const mapTo3D = (points, withOriginalPoints = false) =>
+  withOriginalPoints
+    ? points.map((point) => proj.point(...point).concat(point))
+    : points.map((point) => proj.point(...point));
 
 export const dottedLine = (x0, w, dx = 1) => {
   return range(x0, x0 + w, dx);
@@ -46,6 +60,51 @@ export const dottedBox = (
       const points = [];
       dottedLine(z0, d, dz).forEach((z) => points.push([x, y, z]));
       return points;
+    })
+    .flat();
+};
+
+export function d2r(deg) {
+  return (deg * Math.PI) / 180;
+}
+
+export const dottedCircle = (
+  x0,
+  y0,
+  r = 1,
+  steps = 10,
+  offset = 0,
+  angle = 360
+) => {
+  const angleRad = d2r(angle);
+  const step = angleRad / steps;
+  const offsetRad = d2r(offset);
+  return range(offsetRad, angleRad + offsetRad, step).map((a) => {
+    const x = x0 + Math.cos(a) * r;
+    const y = y0 + Math.sin(a) * r;
+    return [x, y, 0];
+  });
+};
+
+export const dottedSphere = (
+  x0,
+  y0,
+  z0,
+  r = 1,
+  steps = 10,
+  offset = 0,
+  angle = 360
+) => {
+  const circumference = Math.PI * r * 2;
+  return dottedCircle(0, 0, r, steps / 2, -90, 180)
+    .map(([newR, z]) => {
+      const newCircumference = Math.PI * newR * 2;
+      const newSteps = Math.floor((steps * newCircumference) / circumference);
+      return dottedCircle(x0, y0, newR, newSteps, offset, angle).map(
+        ([x, y]) => {
+          return [x, y, z0 + z];
+        }
+      );
     })
     .flat();
 };
