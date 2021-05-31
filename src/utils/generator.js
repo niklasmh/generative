@@ -1,14 +1,34 @@
-import { Project } from "../projects/ClosedBezier";
-
-export function range(a, b, step = 1) {
+export function range(a, b, step = 1, scale = 1) {
   const numbers = [];
-  if (a > b) {
-    for (let number = a; number < b; number += step) {
+  const stepScaled = Math.abs(step * scale);
+  const aScaled = a * scale;
+  const bScaled = b * scale;
+  if (b < a) {
+    for (let number = bScaled; number < aScaled; number += stepScaled) {
       numbers.push(number);
     }
   } else {
-    for (let number = a; number < b; number += step) {
+    for (let number = aScaled; number < bScaled; number += stepScaled) {
       numbers.push(number);
+    }
+  }
+  if (step * scale < 0) {
+    return numbers.reverse();
+  }
+  return numbers;
+}
+
+export function linspace(a, b, steps = 1, endpoint = false, scale = 1) {
+  const numbers = [];
+  const includeEndpoint = endpoint ? 1 : 0;
+  const step = (scale * (b - a)) / (steps - includeEndpoint);
+  if (b < a) {
+    for (let number = 0; number < steps; number++) {
+      numbers.push(a + step * number);
+    }
+  } else {
+    for (let number = 0; number < steps; number++) {
+      numbers.push(a + step * number);
     }
   }
   return numbers;
@@ -74,12 +94,10 @@ export const dottedCircle = (
   r = 1,
   steps = 10,
   offset = 0,
-  angle = 360
+  angle = 360,
+  endpoint = false
 ) => {
-  const angleRad = d2r(angle);
-  const step = angleRad / steps;
-  const offsetRad = d2r(offset);
-  return range(offsetRad, angleRad + offsetRad, step).map((a) => {
+  return linspace(offset, angle + offset, steps, endpoint, d2r(1)).map((a) => {
     const x = x0 + Math.cos(a) * r;
     const y = y0 + Math.sin(a) * r;
     return [x, y, 0];
@@ -95,16 +113,24 @@ export const dottedSphere = (
   offset = 0,
   angle = 360
 ) => {
-  const circumference = Math.PI * r * 2;
-  return dottedCircle(0, 0, r, steps / 2, -90, 180)
-    .map(([newR, z]) => {
-      const newCircumference = Math.PI * newR * 2;
+  const circumference = 360 * r;
+  return dottedCircle(0, 0, r, steps / 2, 0, 180, true)
+    .map(([z, newR]) => {
+      const newCircumference = 360 * newR;
       const newSteps = Math.floor((steps * newCircumference) / circumference);
-      return dottedCircle(x0, y0, newR, newSteps, offset, angle).map(
-        ([x, y]) => {
-          return [x, y, z0 + z];
-        }
-      );
+      const latitudeCircle = dottedCircle(
+        x0,
+        y0,
+        newR,
+        newSteps,
+        offset,
+        angle
+      ).map(([x, y]) => {
+        return [x, y, z0 + z];
+      });
+      if (latitudeCircle.length !== newSteps)
+        console.log(latitudeCircle.length, newSteps, newR);
+      return latitudeCircle;
     })
     .flat();
 };
