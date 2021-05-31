@@ -2,6 +2,7 @@ export { Project as ClosedBezier } from "./ClosedBezier";
 export { Project as Contrasts } from "./Contrasts";
 export { Project as CurvedFlatSurface } from "./CurvedFlatSurface";
 export { Project as Depth } from "./Depth";
+export { Project as Earth } from "./Earth";
 export { Project as Fisheye } from "./Fisheye";
 export { Project as InverseFisheye } from "./InverseFisheye";
 export { Project as Lines } from "./Lines";
