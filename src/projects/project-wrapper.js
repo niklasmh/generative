@@ -1,5 +1,5 @@
 import p5 from "p5";
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Projection } from "../utils/projection";
 
 function useRenderSketch(sketch, canvasContainer, seed) {
@@ -28,6 +28,7 @@ function ProjectWrapper({
   const canvasContainerRef = useRef();
   const printCanvasContainerRef = useRef();
   const projectRef = useRef();
+  const statusRef = useRef();
 
   useEffect(() => {
     if (seed !== -1) console.log("Seed:", seed);
@@ -148,9 +149,16 @@ function ProjectWrapper({
         project.rect(100 - margin, 0, margin, 100);
         project.rect(0, (height / width) * 100 - margin, 100, margin);
         project.scale(1);
-        console.log("Saving image ...");
-        project.save(name + "-" + seed + ".png");
-        console.log("Ferdig!");
+        statusRef.current.innerHTML = "Saving image...";
+        setTimeout(() => {
+          console.log("Saving image ...");
+          project.save(name + "-" + seed + ".png");
+          statusRef.current.innerHTML = "Done!";
+          console.log("Ferdig!");
+          setTimeout(() => {
+            statusRef.current.innerHTML = "";
+          }, 3000);
+        }, 10);
       };
       project.draw = scaleDrawThenSave;
     };
@@ -164,8 +172,17 @@ function ProjectWrapper({
         ref={canvasContainerRef}
         title={noDownload ? "" : "Click to download"}
         style={{ cursor: "pointer" }}
-        onClick={() => noDownload || generatePrint()}
+        onClick={() => {
+          if (!noDownload) {
+            statusRef.current.innerHTML =
+              "Generating image... (page may freeze)";
+            setTimeout(() => {
+              generatePrint();
+            }, 10);
+          }
+        }}
       ></div>
+      <h3 ref={statusRef}></h3>
       <div
         id={uniqueIDRef.current + "-hidden"}
         style={{ display: "none" }}
