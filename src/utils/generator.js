@@ -95,11 +95,15 @@ export const dottedCircle = (
   steps = 10,
   offset = 0,
   angle = 360,
-  endpoint = false
+  endpoint = false,
+  includeAngle = false
 ) => {
   return linspace(offset, angle + offset, steps, endpoint, d2r(1)).map((a) => {
     const x = x0 + Math.cos(a) * r;
     const y = y0 + Math.sin(a) * r;
+    if (includeAngle) {
+      return [x, y, 0, a];
+    }
     return [x, y, 0];
   });
 };
@@ -111,11 +115,12 @@ export const dottedSphere = (
   r = 1,
   steps = 10,
   offset = 0,
-  angle = 360
+  angle = 360,
+  includeAngle = false
 ) => {
   const circumference = 360 * r;
-  return dottedCircle(0, 0, r, steps / 2, 0, 180, true)
-    .map(([z, newR]) => {
+  return dottedCircle(0, 0, r, steps / 2, 0, 180, true, includeAngle)
+    .map(([z, newR, , v]) => {
       const newCircumference = 360 * newR;
       const newSteps = Math.floor((steps * newCircumference) / circumference);
       const latitudeCircle = dottedCircle(
@@ -124,8 +129,13 @@ export const dottedSphere = (
         newR,
         newSteps,
         offset,
-        angle
-      ).map(([x, y]) => {
+        angle,
+        false,
+        includeAngle
+      ).map(([x, y, , u]) => {
+        if (includeAngle) {
+          return [x, y, z0 + z, u, v];
+        }
         return [x, y, z0 + z];
       });
       if (latitudeCircle.length !== newSteps)
