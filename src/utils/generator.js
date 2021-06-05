@@ -138,8 +138,6 @@ export const dottedSphere = (
         }
         return [x, y, z0 + z];
       });
-      if (latitudeCircle.length !== newSteps)
-        console.log(latitudeCircle.length, newSteps, newR);
       return latitudeCircle;
     })
     .flat();

@@ -184,9 +184,6 @@ export class Projection {
   pointToSize(x, y, z) {
     const invZ = 1 / z;
     const distance = Math.sqrt(x * x + y * y + invZ * invZ);
-    // console.log(distance, x, y, 1 / z);
-    // console.table(this.matrix);
-    // console.table(this.projection);
     return Math.atan2(1, distance) / this.fov;
   }
 }
