@@ -18,6 +18,8 @@ function ProjectWrapper({
   name,
   draw,
   preload = null,
+  frameRate = 0,
+  frames = 0,
   webgl = false,
   margin = 0,
   width = 500,
@@ -61,8 +63,10 @@ function ProjectWrapper({
         const parent = document.getElementById(uniqueIDRef.current);
         if (parent) parent.innerHTML = "";
         canvas.parent(uniqueIDRef.current);
-        project.noLoop();
+        if (frameRate === 0) project.noLoop();
+        else project.frameRate(frameRate);
         project.angleMode(project.DEGREES);
+        project.frame = 0;
       };
 
       const scaleDraw = () => {
@@ -79,15 +83,22 @@ function ProjectWrapper({
                   : project.__proto__[key])
           );
         window.proj = new Projection();
+        window.frame = project.frame;
         draw.bind(project)();
         project.translate(-50, -50);
         project.fill(255);
         project.noStroke();
-        project.rect(0, 0, margin, 100);
-        project.rect(0, 0, 100, margin);
-        project.rect(100 - margin, 0, margin, 100);
-        project.rect(0, (height / width) * 100 - margin, 100, margin);
+        if (margin) {
+          project.rect(0, 0, margin, 100);
+          project.rect(0, 0, 100, margin);
+          project.rect(100 - margin, 0, margin, 100);
+          project.rect(0, (height / width) * 100 - margin, 100, margin);
+        }
         project.scale(1);
+        project.frame++;
+        if (project.frame >= frames) {
+          project.noLoop();
+        }
       };
       project.draw = scaleDraw.bind(project);
     },
@@ -140,14 +151,24 @@ function ProjectWrapper({
                   : project.__proto__[key])
           );
         window.proj = new Projection();
-        draw.bind(project)();
+        window.frame = 0;
+        if (frames) {
+          for (let frame = 0; frame < frames; frame++) {
+            window.frame = frame;
+            draw.bind(project)();
+          }
+        } else {
+          draw.bind(project)();
+        }
         project.translate(-50, -50);
         project.fill(255);
         project.noStroke();
-        project.rect(0, 0, margin, 100);
-        project.rect(0, 0, 100, margin);
-        project.rect(100 - margin, 0, margin, 100);
-        project.rect(0, (height / width) * 100 - margin, 100, margin);
+        if (margin) {
+          project.rect(0, 0, margin, 100);
+          project.rect(0, 0, 100, margin);
+          project.rect(100 - margin, 0, margin, 100);
+          project.rect(0, (height / width) * 100 - margin, 100, margin);
+        }
         project.scale(1);
         statusRef.current.innerHTML = "Saving image...";
         setTimeout(() => {
