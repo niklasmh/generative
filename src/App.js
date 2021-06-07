@@ -20,7 +20,14 @@ function ProjectList({ seed }) {
                   <span className="list-element-name">
                     {Project.prototype.name}
                   </span>
-                  <Project width={200} height={200} seed={seed} noDownload />
+                  <Project
+                    name={Project.prototype.name}
+                    fileName={project}
+                    width={200}
+                    height={200}
+                    seed={seed}
+                    noDownload
+                  />
                 </Link>
               </div>
             );
@@ -39,7 +46,14 @@ function ProjectList({ seed }) {
                   <span className="list-element-name">
                     {Project.prototype.name}
                   </span>
-                  <Project width={200} height={200} seed={seed} noDownload />
+                  <Project
+                    name={Project.prototype.name}
+                    fileName={project}
+                    width={200}
+                    height={200}
+                    seed={seed}
+                    noDownload
+                  />
                 </Link>
               </div>
             );
@@ -84,7 +98,11 @@ function Project({ seed, setSeed = () => {} }) {
       {Component.prototype.description ? (
         <p>{Component.prototype.description}</p>
       ) : null}
-      <Component seed={seed} />
+      <Component
+        seed={seed}
+        name={Component.prototype.name}
+        fileName={pascalCaseName}
+      />
     </div>
   );
 }

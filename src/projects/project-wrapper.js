@@ -1,5 +1,5 @@
 import p5 from "p5";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import { Projection } from "../utils/projection";
 
 function useRenderSketch(sketch, canvasContainer, seed) {
@@ -16,6 +16,7 @@ function ProjectWrapper({
   seed = -1,
   noDownload = false,
   name,
+  fileName,
   draw,
   preload = null,
   frameRate = 0,
@@ -211,6 +212,34 @@ function ProjectWrapper({
           }
         }}
       ></div>
+      {noDownload ? null : (
+        <>
+          <p>
+            <a
+              href={`https://github.com/niklasmh/generative/blob/master/src/projects/${fileName}.js`}
+              target="_blank"
+            >
+              Link to the code on GitHub
+            </a>
+          </p>
+          <p>
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+                if (!noDownload) {
+                  statusRef.current.innerHTML =
+                    "Generating 8k image... (page may freeze)";
+                  setTimeout(() => {
+                    generatePrint();
+                  }, 10);
+                }
+              }}
+            >
+              Generate high resolution image
+            </button>
+          </p>
+        </>
+      )}
       <h3 ref={statusRef}></h3>
       <div
         id={uniqueIDRef.current + "-hidden"}

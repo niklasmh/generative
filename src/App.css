@@ -44,7 +44,7 @@ a {
   max-width: 100%;
 }
 
-.seed > button {
+button {
   cursor: pointer;
   font-size: 1em;
   background-color: #0004;
@@ -52,10 +52,16 @@ a {
   border-radius: 4px;
   padding: 8px 16px;
   color: #fffa;
+  box-shadow: 0 0 24px -8px #0004;
+  transition: box-shadow 0.2s;
 }
 
-.seed > button:hover {
+button:hover {
   background-color: #0003;
+}
+
+button:active {
+  box-shadow: 0 0 0 0 #0004;
 }
 
 .list {
