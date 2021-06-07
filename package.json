@@ -3,7 +3,11 @@
   "description": "Generative things",
   "version": "0.1.0",
   "private": true,
+  "repository": {
+    "git": "https://github.com/niklasmh/generative"
+  },
   "dependencies": {
+    "color-blend": "^3.0.1",
     "p5": "^1.3.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
