@@ -96,10 +96,11 @@ function ProjectWrapper({
         }
         project.scale(1);
         project.frame++;
+        let newFrames = frames;
         if (typeof frames === "function") {
-          frames = frames(width);
+          newFrames = frames(width);
         }
-        if (project.frame >= frames) {
+        if (project.frame >= newFrames) {
           project.noLoop();
         }
       };
@@ -156,10 +157,11 @@ function ProjectWrapper({
         window.proj = new Projection();
         window.frame = 0;
         if (frames) {
+          let newFrames = frames;
           if (typeof frames === "function") {
-            frames = frames(finalWidth);
+            newFrames = frames(finalWidth);
           }
-          for (let frame = 0; frame < frames; frame++) {
+          for (let frame = 0; frame < newFrames; frame++) {
             window.frame = frame;
             draw.bind(project)();
           }
