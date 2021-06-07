@@ -36,7 +36,7 @@ function draw() {
 const name = "Uneven circle";
 
 export function Project({ ...props }) {
-  return <ProjectWrapper name={name} draw={draw} {...props} />;
+  return <ProjectWrapper draw={draw} {...props} />;
 }
 
 Project.prototype.name = name;

@@ -31,9 +31,7 @@ function stl(points) {
 }
 
 export function Project({ ...props }) {
-  return (
-    <ProjectWrapper name={name} draw={draw} preload={preload} {...props} />
-  );
+  return <ProjectWrapper draw={draw} preload={preload} {...props} />;
 }
 
 const name = "STLFile vertices";

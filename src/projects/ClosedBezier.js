@@ -25,7 +25,7 @@ function draw() {
 const name = "Closed bezier curve";
 
 export function Project({ ...props }) {
-  return <ProjectWrapper name={name} draw={draw} {...props} />;
+  return <ProjectWrapper draw={draw} {...props} />;
 }
 
 Project.prototype.name = name;

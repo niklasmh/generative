@@ -108,7 +108,6 @@ const name = "Ray tracing";
 export function Project({ ...props }) {
   return (
     <ProjectWrapper
-      name={name}
       draw={draw}
       frameRate={100}
       frames={(width) => 100 / getDxBasedOnWidth(width) - 1}

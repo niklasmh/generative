@@ -21,7 +21,7 @@ function draw() {
 const name = "Test";
 
 export function Project({ ...props }) {
-  return <ProjectWrapper name={name} draw={draw} {...props} />;
+  return <ProjectWrapper draw={draw} {...props} />;
 }
 
 Project.prototype.name = name;

@@ -82,7 +82,7 @@ export function spiral() {
 const name = "Depth test";
 
 export function Project({ ...props }) {
-  return <ProjectWrapper name={name} draw={draw} {...props} />;
+  return <ProjectWrapper draw={draw} {...props} />;
 }
 
 Project.prototype.name = name;

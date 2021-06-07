@@ -45,7 +45,7 @@ function draw() {
 }
 
 export function Project({ ...props }) {
-  return <ProjectWrapper name={name} draw={draw} {...props} />;
+  return <ProjectWrapper draw={draw} {...props} />;
 }
 
 const name = "Curved flat surface";

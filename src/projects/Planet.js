@@ -119,7 +119,7 @@ function planet(radius, details, dotSize) {
 const name = "Planet";
 
 export function Project({ ...props }) {
-  return <ProjectWrapper name={name} draw={draw} {...props} />;
+  return <ProjectWrapper draw={draw} {...props} />;
 }
 
 Project.prototype.name = name;

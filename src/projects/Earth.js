@@ -104,9 +104,7 @@ function earth(radius, details, dotSize) {
 const name = "Earth";
 
 export function Project({ ...props }) {
-  return (
-    <ProjectWrapper name={name} draw={draw} preload={preload} {...props} />
-  );
+  return <ProjectWrapper draw={draw} preload={preload} {...props} />;
 }
 
 Project.prototype.name = name;

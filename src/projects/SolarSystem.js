@@ -87,7 +87,7 @@ function planet(distance, angle, radius, color, details = 50, dotSize = 10) {
 const name = "Solar system";
 
 export function Project({ ...props }) {
-  return <ProjectWrapper name={name} draw={draw} {...props} />;
+  return <ProjectWrapper draw={draw} {...props} />;
 }
 
 Project.prototype.name = name;
