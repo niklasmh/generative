@@ -1,25 +1,13 @@
 import { hexToColor } from "./colors";
+import { Projection } from "./projection";
 
-export function lineSphereIntersection(
-  lx1,
-  ly1,
-  lz1,
-  lx2,
-  ly2,
-  lz2,
-  cx,
-  cy,
-  cz,
-  cr,
-  includeNormal = false
-) {
+export function lineSphereIntersection(lx1, ly1, lz1, lx2, ly2, lz2, cx, cy, cz, cr, includeNormal = false) {
   const vx = lx2 - lx1;
   const vy = ly2 - ly1;
   const vz = lz2 - lz1;
 
   const A = vx * vx + vy * vy + vz * vz;
-  const B =
-    2.0 * (lx1 * vx + ly1 * vy + lz1 * vz - vx * cx - vy * cy - vz * cz);
+  const B = 2.0 * (lx1 * vx + ly1 * vy + lz1 * vz - vx * cx - vy * cy - vz * cz);
   const C =
     lx1 * lx1 -
     2 * lx1 * cx +
@@ -40,21 +28,13 @@ export function lineSphereIntersection(
 
   if (t1 < -0.001) return [null, null];
 
-  const s1 = [
-    lx1 * (1 - t1) + t1 * lx2,
-    ly1 * (1 - t1) + t1 * ly2,
-    lz1 * (1 - t1) + t1 * lz2,
-  ];
+  const s1 = [lx1 * (1 - t1) + t1 * lx2, ly1 * (1 - t1) + t1 * ly2, lz1 * (1 - t1) + t1 * lz2];
   if (D == 0) {
     return [s1, null];
   }
 
   const t2 = (-B + Math.sqrt(D)) / (2.0 * A);
-  const s2 = [
-    lx1 * (1 - t2) + t2 * lx2,
-    ly1 * (1 - t2) + t2 * ly2,
-    lz1 * (1 - t2) + t2 * lz2,
-  ];
+  const s2 = [lx1 * (1 - t2) + t2 * lx2, ly1 * (1 - t2) + t2 * ly2, lz1 * (1 - t2) + t2 * lz2];
 
   if (includeNormal) {
     const [nx1, ny1, nz1] = normalVector(cx, cy, cz, s1[0], s1[1], s1[2]);
@@ -74,6 +54,65 @@ export function lineSphereIntersection(
   return [s2, s1];
 }
 
+export function lineTriangleIntersection(
+  lx1,
+  ly1,
+  lz1,
+  lx2,
+  ly2,
+  lz2,
+  tx1,
+  ty1,
+  tz1,
+  tx2,
+  ty2,
+  tz2,
+  tx3,
+  ty3,
+  tz3,
+  includeNormal = false
+) {
+  // Möller–Trumbore intersection algorithm
+  const eps = 0.0000001;
+  const [vx, vy, vz] = [lx2 - lx1, ly2 - ly1, lz2 - lz1];
+  const [ex1, ey1, ez1] = [tx2 - tx1, ty2 - ty1, tz2 - tz1];
+  const [ex2, ey2, ez2] = [tx3 - tx1, ty3 - ty1, tz3 - tz1];
+  const [hx, hy, hz] = cross(vx, vy, vz, ex2, ey2, ez2);
+  const a = dot(ex1, ey1, ez1, hx, hy, hz);
+
+  if (a > -eps && a < eps) {
+    return null;
+  }
+
+  const f = 1 / a;
+  const [sx, sy, sz] = [lx1 - tx1, ly1 - ty1, lz1 - tz1];
+  const u = f * dot(sx, sy, sz, hx, hy, hz);
+
+  if (u < 0.0 || u > 1.0) {
+    return null;
+  }
+
+  const [qx, qy, qz] = cross(sx, sy, sz, ex1, ey1, ez1);
+  const v = f * dot(vx, vy, vz, qx, qy, qz);
+
+  if (v < 0.0 || u + v > 1.0) {
+    return null;
+  }
+
+  const t = f * dot(ex2, ey2, ez2, qx, qy, qz);
+  if (t > eps) {
+    if (includeNormal) {
+      const [nx, ny, nz] = cross(ex1, ey1, ez1, ex2, ey2, ez2);
+      const dist = distance(0, 0, 0, nx, ny, nz);
+      return [lx1 + vx * t, ly1 + vy * t, lz1 + vz * t, nx / dist, ny / dist, nz / dist];
+    }
+
+    return [lx1 + vx * t, ly1 + vy * t, lz1 + vz * t];
+  }
+
+  return null;
+}
+
 function normalVector(x1, y1, z1, x2, y2, z2) {
   const dx = x2 - x1;
   const dy = y2 - y1;
@@ -84,6 +123,10 @@ function normalVector(x1, y1, z1, x2, y2, z2) {
 
 function dot(ax, ay, az, bx, by, bz) {
   return ax * bx + ay * by + az * bz;
+}
+
+function cross(ax, ay, az, bx, by, bz) {
+  return [ay * bz - az * by, az * bx - ax * bz, ax * by - ay * bx];
 }
 
 export function distance(x1, y1, z1, x2, y2, z2) {
@@ -98,31 +141,175 @@ export function getReflection(vx, vy, vz, nx, ny, nz) {
   return [vx - dotProduct * nx, vy - dotProduct * ny, vz - dotProduct * nz];
 }
 
+function parseColor(color) {
+  if (typeof color === "string") {
+    return hexToColor(color);
+  } else {
+    return color;
+  }
+}
+
+function parseMaterial(material) {
+  if (typeof material === "string") {
+    return { type: material, value: 1 };
+  } else if (typeof material === "object") {
+    return material;
+  } else {
+    return { type: "mirror", value: 1 };
+  }
+}
+
 export class Sphere {
-  constructor(x, y, z, r, color) {
+  constructor(x, y, z, r, color, material = "mirror") {
     this.x = x;
     this.y = y;
     this.z = z;
     this.r = r;
-    if (typeof color === "string") {
-      this.color = hexToColor(color);
-    } else {
-      this.color = color;
-    }
+    this.color = parseColor(color);
+    this.material = parseMaterial(material);
   }
   intersectLine(x1, y1, z1, x2, y2, z2, includeNormal = false) {
-    return lineSphereIntersection(
+    return lineSphereIntersection(x1, y1, z1, x2, y2, z2, this.x, this.y, this.z, this.r, includeNormal);
+  }
+}
+
+export class Triangle {
+  constructor(x1, y1, z1, x2, y2, z2, x3, y3, z3, color, material = "mirror") {
+    this.x1 = x1;
+    this.y1 = y1;
+    this.z1 = z1;
+    this.x2 = x2;
+    this.y2 = y2;
+    this.z2 = z2;
+    this.x3 = x3;
+    this.y3 = y3;
+    this.z3 = z3;
+    this.color = parseColor(color);
+    this.material = parseMaterial(material);
+  }
+  intersectLine(x1, y1, z1, x2, y2, z2, includeNormal = false) {
+    return [
+      lineTriangleIntersection(
+        x1,
+        y1,
+        z1,
+        x2,
+        y2,
+        z2,
+        this.x1,
+        this.y1,
+        this.z1,
+        this.x2,
+        this.y2,
+        this.z2,
+        this.x3,
+        this.y3,
+        this.z3,
+        includeNormal
+      ),
+      null,
+    ];
+  }
+}
+
+export class Square {
+  constructor(x1, y1, z1, x2, y2, z2, x3, y3, z3, x4, y4, z4, color, material = "mirror") {
+    this.x1 = x1;
+    this.y1 = y1;
+    this.z1 = z1;
+    this.x2 = x2;
+    this.y2 = y2;
+    this.z2 = z2;
+    this.x3 = x3;
+    this.y3 = y3;
+    this.z3 = z3;
+    this.x4 = x4;
+    this.y4 = y4;
+    this.z4 = z4;
+    this.color = parseColor(color);
+    this.material = parseMaterial(material);
+  }
+  intersectLine(x1, y1, z1, x2, y2, z2, includeNormal = false) {
+    const triangle1 = lineTriangleIntersection(
       x1,
       y1,
       z1,
       x2,
       y2,
       z2,
-      this.x,
-      this.y,
-      this.z,
-      this.r,
+      this.x1,
+      this.y1,
+      this.z1,
+      this.x2,
+      this.y2,
+      this.z2,
+      this.x3,
+      this.y3,
+      this.z3,
       includeNormal
     );
+    if (triangle1 !== null) return [triangle1, null];
+    const triangle2 = lineTriangleIntersection(
+      x1,
+      y1,
+      z1,
+      x2,
+      y2,
+      z2,
+      this.x3,
+      this.y3,
+      this.z3,
+      this.x4,
+      this.y4,
+      this.z4,
+      this.x1,
+      this.y1,
+      this.z1,
+      includeNormal
+    );
+    return [triangle2, null];
   }
+}
+
+export function Cube(x, y, z, w, h, d, rx, ry, rz, colors, materials = "matte", insideOut = false) {
+  const projection = new Projection();
+  projection.skipProjection = true;
+  projection.setZToSize = false;
+  projection.zoom = 1;
+  const scale = insideOut ? -1 : 1;
+  projection.scale(-w * scale, -h * scale, d * scale);
+  projection.rotateX(rx);
+  projection.rotateY(ry);
+  projection.rotateZ(rz);
+  projection.translate(-x, y, z);
+  const p000 = projection.point(0, 0, 0);
+  const p001 = projection.point(0, 0, 1);
+  const p010 = projection.point(0, 1, 0);
+  const p011 = projection.point(0, 1, 1);
+  const p100 = projection.point(1, 0, 0);
+  const p101 = projection.point(1, 0, 1);
+  const p110 = projection.point(1, 1, 0);
+  const p111 = projection.point(1, 1, 1);
+  const getColor = (color) => {
+    if (typeof colors === "string") return parseColor(colors);
+    return parseColor(color);
+  };
+  const getMaterial = (material) => {
+    if (typeof materials === "string") return parseMaterial(materials);
+    return parseMaterial(material);
+  };
+  return [
+    // Top
+    new Square(...p010, ...p110, ...p111, ...p011, getColor(colors[0]), getMaterial(materials[0])),
+    // Bottom
+    new Square(...p000, ...p001, ...p101, ...p100, getColor(colors[1]), getMaterial(materials[1])),
+    // Left
+    new Square(...p010, ...p011, ...p001, ...p000, getColor(colors[2]), getMaterial(materials[2])),
+    // Right
+    new Square(...p110, ...p100, ...p101, ...p111, getColor(colors[3]), getMaterial(materials[3])),
+    // Far
+    new Square(...p001, ...p011, ...p111, ...p101, getColor(colors[4]), getMaterial(materials[4])),
+    // Near
+    new Square(...p000, ...p100, ...p110, ...p010, getColor(colors[5]), getMaterial(materials[5])),
+  ];
 }

@@ -14,6 +14,7 @@ export class Projection {
   map = null;
   setZToSize = true; // Make Z-axis act as point size on screen
   projection = this.getProjection();
+  skipProjection = false;
 
   constructor() {
     this.matrix = [
@@ -91,12 +92,7 @@ export class Projection {
     ]);
   }
 
-  multiply(
-    matrix,
-    setOriginal = true,
-    oldMatrix = this.matrix,
-    isPoint = false
-  ) {
+  multiply(matrix, setOriginal = true, oldMatrix = this.matrix, isPoint = false) {
     const newMatrix = [
       [0, 0, 0, 0],
       [0, 0, 0, 0],
@@ -135,16 +131,22 @@ export class Projection {
   }
 
   getProjection() {
+    if (this.skipProjection) {
+      return this.multiply(
+        [
+          [1, 0, 0, 0],
+          [0, 1, 0, 0],
+          [0, 0, 1, 0],
+          [0, 0, 0, 1],
+        ],
+        false
+      );
+    }
     const e = 1 / Math.tan(this.d2r(0.5 * this.fov));
     const perspective = [
       [e / this.aspectRatio, 0, 0, 0],
       [0, e, 0, 0],
-      [
-        0,
-        0,
-        -(this.far + this.near) / (this.far - this.near),
-        (-2 * this.near * this.far) / (this.far - this.near),
-      ],
+      [0, 0, -(this.far + this.near) / (this.far - this.near), (-2 * this.near * this.far) / (this.far - this.near)],
       [0, 0, -1, 0],
     ];
     return this.multiply(perspective, false);
@@ -152,10 +154,7 @@ export class Projection {
 
   fisheyeLens([x, y, z], value) {
     const distance2d = Math.sqrt(x * x + y * y);
-    const newDistRatio =
-      value >= 0
-        ? Math.atan2(value, distance2d)
-        : Math.atan2(-value, -value - distance2d);
+    const newDistRatio = value >= 0 ? Math.atan2(value, distance2d) : Math.atan2(-value, -value - distance2d);
     return [x * newDistRatio, y * newDistRatio, z];
   }
 
@@ -171,11 +170,7 @@ export class Projection {
       point[2] = this.pointToSize(...point);
     }
     if (this.lens) {
-      return this.lens([
-        -point[0] * this.zoom,
-        point[1] * this.zoom,
-        point[2] * this.zoom,
-      ]);
+      return this.lens([-point[0] * this.zoom, point[1] * this.zoom, point[2] * this.zoom]);
     }
     return [-point[0] * this.zoom, point[1] * this.zoom, point[2] * this.zoom];
   }

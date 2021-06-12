@@ -1,4 +1,4 @@
-import { normal } from "color-blend";
+import { normal, darken } from "color-blend";
 
 export function combineColors(c1, c2) {
   if (c2[3] === 255) return c2;
@@ -17,6 +17,14 @@ export function combineColors(c1, c2) {
     }
   );
   return [r, g, b, a * 255];
+}
+
+export function darkenColor(color, value, withAlpha = false) {
+  const [r, g, b, a] = color;
+  if (withAlpha) {
+    return [r * value, g * value, b * value, a * value];
+  }
+  return [r * value, g * value, b * value, a];
 }
 
 export function hexToColor(hex) {
