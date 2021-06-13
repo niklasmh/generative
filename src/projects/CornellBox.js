@@ -1,10 +1,10 @@
 import { ProjectWrapper } from ".";
 import { combineColors, darkenColor } from "../utils/colors";
-import { getReflection, distance, Sphere, Square, Cube } from "../utils/geometry";
+import { getReflection, distance, Sphere, Cube } from "../utils/geometry";
 
 const X = 0;
 const Y = -20;
-const Z = 0;
+const Z = -10;
 const W = 37;
 const H = 50;
 const D = 80;
@@ -15,8 +15,8 @@ const right = X + W;
 const far = Z + D;
 const near = Z;
 const objects = [
-  new Sphere(right - 20, bottom - 15, 40, 15, "#fff", "mirror"),
-  new Sphere(left + 20, bottom - 25, 35, 5, "#80f", "matte"),
+  new Sphere(right - 20, bottom - 15, Z + 40, 15, "#fff", "mirror"),
+  new Sphere(left + 20, bottom - 25, Z + 35, 5, "#80f", "matte"),
   ...new Cube(
     left,
     bottom,
@@ -30,8 +30,8 @@ const objects = [
     ["#fff", "#0ff", "#800", "#080", "#ff0", "#f11"],
     ["light", "matte", "matte", "matte", "matte", "matte"]
   ),
-  ...new Cube(left + 5, bottom, 30, 20, 20, 20, 0, -20, 0, "#f00", "mirror"),
-  ...new Cube(right - Math.cos((50 / 180) * Math.PI) * 20, bottom, 14, 20, 8, 8, 0, 0, 50, "#00f", "matte"),
+  ...new Cube(left + 5, bottom, Z + 30, 20, 20, 20, 0, -20, 0, "#f00", "mirror"),
+  ...new Cube(right - Math.cos((50 / 180) * Math.PI) * 20, bottom, Z + 14, 20, 8, 8, 0, 0, 50, "#00f", "matte"),
 ];
 
 function getDxBasedOnWidth(width) {
@@ -58,7 +58,7 @@ function getPixel(x, y) {
   return combineColors(backgroundColor, getColorFromRay(objects, x / 2, y / 2, 0, x, y, 20, 5));
 }
 
-function getColorFromRay(objects, x1, y1, z1, x2, y2, z2, level = 1, totalLevels = -1) {
+export function getColorFromRay(objects, x1, y1, z1, x2, y2, z2, level = 1, totalLevels = -1) {
   const levels = totalLevels === -1 ? level : totalLevels;
   return objects
     .reduce((acc, object) => {
