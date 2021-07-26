@@ -26,7 +26,7 @@ export function lineSphereIntersection(lx1, ly1, lz1, lx2, ly2, lz2, cx, cy, cz,
 
   const t1 = (-B - Math.sqrt(D)) / (2.0 * A);
 
-  if (t1 < -0.001) return [null, null];
+  if (t1 < 0.001) return [null, null];
 
   const s1 = [lx1 * (1 - t1) + t1 * lx2, ly1 * (1 - t1) + t1 * ly2, lz1 * (1 - t1) + t1 * lz2];
   if (D == 0) {
@@ -37,8 +37,8 @@ export function lineSphereIntersection(lx1, ly1, lz1, lx2, ly2, lz2, cx, cy, cz,
   const s2 = [lx1 * (1 - t2) + t2 * lx2, ly1 * (1 - t2) + t2 * ly2, lz1 * (1 - t2) + t2 * lz2];
 
   if (includeNormal) {
-    const [nx1, ny1, nz1] = normalVector(cx, cy, cz, s1[0], s1[1], s1[2]);
-    const [nx2, ny2, nz2] = normalVector(cx, cy, cz, s2[0], s2[1], s2[2]);
+    const [nx1, ny1, nz1] = unitVector(s1[0] - cx, s1[1] - cy, s1[2] - cz);
+    const [nx2, ny2, nz2] = unitVector(s2[0] - cx, s2[1] - cy, s2[2] - cz);
     s1.push(nx1);
     s1.push(ny1);
     s1.push(nz1);
@@ -113,32 +113,87 @@ export function lineTriangleIntersection(
   return null;
 }
 
-function normalVector(x1, y1, z1, x2, y2, z2) {
-  const dx = x2 - x1;
-  const dy = y2 - y1;
-  const dz = z2 - z1;
-  const dist = Math.sqrt(dx * dx + dy * dy + dz * dz);
-  return [dx / dist, dy / dist, dz / dist];
+export function unitVector(x, y, z) {
+  const dist = Math.sqrt(x * x + y * y + z * z);
+  return [x / dist, y / dist, z / dist];
 }
 
-function dot(ax, ay, az, bx, by, bz) {
+export function dot(ax, ay, az, bx, by, bz) {
   return ax * bx + ay * by + az * bz;
 }
 
-function cross(ax, ay, az, bx, by, bz) {
+export function cross(ax, ay, az, bx, by, bz) {
   return [ay * bz - az * by, az * bx - ax * bz, ax * by - ay * bx];
 }
 
-export function distance(x1, y1, z1, x2, y2, z2) {
+export function distance(x1, y1, z1, x2 = 0, y2 = 0, z2 = 0) {
   const dx = x2 - x1;
   const dy = y2 - y1;
   const dz = z2 - z1;
   return Math.sqrt(dx * dx + dy * dy + dz * dz);
 }
 
+export function angle(ux, uy, uz, vx, vy, vz) {
+  const uDist = distance(ux, uy, uz);
+  const vDist = distance(vx, vy, vz);
+  return Math.acos(dot(ux, uy, uz, vx, vy, vz) / (uDist * vDist));
+}
+
 export function getReflection(vx, vy, vz, nx, ny, nz) {
   const dotProduct = 2 * dot(vx, vy, vz, nx, ny, nz);
   return [vx - dotProduct * nx, vy - dotProduct * ny, vz - dotProduct * nz];
+}
+
+export function getRefraction(vx, vy, vz, nx, ny, nz, refractionRatio) {
+  const isInside = dot(vx, vy, vz, nx, ny, nz) > 0;
+
+  if (isInside) {
+    // If we ray go with the normal (aka going from inside to outside)
+    refractionRatio = 1 / refractionRatio;
+  } else {
+    //refractionRatio *= 2;
+    nx *= -1;
+    ny *= -1;
+    nz *= -1;
+  }
+
+  const theta = angle(vx, vy, vz, nx, ny, nz);
+  const sinTheta = Math.sin(theta);
+  const sinThetaTimesRatio = sinTheta * refractionRatio;
+
+  if (Math.abs(sinThetaTimesRatio) <= 1) {
+    // We can continue with the refraction
+
+    const rotationPlane = cross(vx, vy, vz, -nx, -ny, -nz);
+
+    if (distance(...rotationPlane) === 0) {
+      // No direction => just continue
+      return [vx, vy, vz];
+    }
+
+    const newTheta = Math.asin(sinThetaTimesRatio);
+
+    return rotateVectorAroundAxis(nx, ny, nz, ...rotationPlane, newTheta);
+  } else {
+    // Now we have to reflect the ray instead (edge case)
+
+    return unitVector(...getReflection(vx, vy, vz, nx, ny, nz));
+  }
+}
+
+export function rotateVectorAroundAxis(vx, vy, vz, rx, ry, rz, theta) {
+  // Using the Rodrigues' rotation formula to rotate old ray vector to a new
+  // ray vector along the rotationPlane
+  const [nrx, nry, nrz] = unitVector(rx, ry, rz);
+  const cos = Math.cos(-theta);
+  const sin = Math.sin(-theta);
+  const [vxrx, vxry, vxrz] = cross(vx, vy, vz, nrx, nry, nrz);
+  const vdotr = dot(vx, vy, vz, nrx, nry, nrz);
+  return [
+    vx * cos + vxrx * sin + nrx * vdotr * (1 - cos),
+    vy * cos + vxry * sin + nry * vdotr * (1 - cos),
+    vz * cos + vxrz * sin + nrz * vdotr * (1 - cos),
+  ];
 }
 
 function parseColor(color) {
