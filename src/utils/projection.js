@@ -92,22 +92,20 @@ export class Projection {
     ]);
   }
 
-  multiply(matrix, setOriginal = true, oldMatrix = this.matrix, isPoint = false) {
+  multiply(matrix, setOriginal = true, oldMatrix = this.matrix, isPoint = false, rows = 4, cols = 4) {
     const newMatrix = [
       [0, 0, 0, 0],
       [0, 0, 0, 0],
       [0, 0, 0, 0],
       [0, 0, 0, 0],
     ];
-    const rows = 4;
-    let cols = 4;
     if (isPoint) {
       cols = 1;
       oldMatrix = oldMatrix.map((element) => [element]);
     }
     for (let y = 0; y < rows; y++) {
       for (let x = 0; x < cols; x++) {
-        for (let z = 0; z < 4; z++) {
+        for (let z = 0; z < rows; z++) {
           newMatrix[y][x] += matrix[y][z] * oldMatrix[z][x];
         }
       }
