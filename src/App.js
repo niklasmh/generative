@@ -10,6 +10,7 @@ const projectsWithThumbnails = [
   "GlassEffect",
   "Planet",
   "RayTracing",
+  "Sdf",
   "SolarSystem",
 ];
 
