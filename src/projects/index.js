@@ -15,6 +15,7 @@ export { Project as OpticalPlanet } from "./OpticalPlanet";
 export { Project as Planet } from "./Planet";
 export { Project as UnevenCircle } from "./UnevenCircle";
 export { Project as RayTracing } from "./RayTracing";
+export { Project as Sdf } from "./Sdf";
 export { Project as SolarSystem } from "./SolarSystem";
 export { Project as StlFiles } from "./StlFiles";
 export { Project as Test } from "./Test";

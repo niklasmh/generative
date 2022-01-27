@@ -56,11 +56,7 @@ function ProjectWrapper({
       }
 
       project.setup = () => {
-        const canvas = project.createCanvas(
-          width,
-          height,
-          webgl ? project.WEBGL : project.P2D
-        );
+        const canvas = project.createCanvas(width, height, webgl ? project.WEBGL : project.P2D);
         const parent = document.getElementById(uniqueIDRef.current);
         if (parent) parent.innerHTML = "";
         canvas.parent(uniqueIDRef.current);
@@ -204,8 +200,7 @@ function ProjectWrapper({
         style={{ cursor: "pointer" }}
         onClick={() => {
           if (!noDownload) {
-            statusRef.current.innerHTML =
-              "Generating image... (page may freeze)";
+            statusRef.current.innerHTML = "Generating image... (page may freeze)";
             setTimeout(() => {
               generatePrint();
             }, 10);
@@ -215,10 +210,7 @@ function ProjectWrapper({
       {noDownload ? null : (
         <>
           <p>
-            <a
-              href={`https://github.com/niklasmh/generative/blob/master/src/projects/${fileName}.js`}
-              target="_blank"
-            >
+            <a href={`https://github.com/niklasmh/generative/blob/master/src/projects/${fileName}.js`} target="_blank">
               Link to the code on GitHub
             </a>
           </p>
@@ -227,8 +219,7 @@ function ProjectWrapper({
               onClick={(e) => {
                 e.preventDefault();
                 if (!noDownload) {
-                  statusRef.current.innerHTML =
-                    "Generating 8k image... (page may freeze)";
+                  statusRef.current.innerHTML = "Generating 8k image... (page may freeze)";
                   setTimeout(() => {
                     generatePrint();
                   }, 10);
@@ -241,11 +232,7 @@ function ProjectWrapper({
         </>
       )}
       <h3 ref={statusRef}></h3>
-      <div
-        id={uniqueIDRef.current + "-hidden"}
-        style={{ display: "none" }}
-        ref={printCanvasContainerRef}
-      ></div>
+      <div id={uniqueIDRef.current + "-hidden"} style={{ display: "none" }} ref={printCanvasContainerRef}></div>
     </>
   );
 }
