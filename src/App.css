@@ -96,7 +96,8 @@ button:active {
   box-sizing: border-box;
 }
 
-canvas {
+canvas,
+.preview {
   max-width: calc(100% - 16px);
   width: auto !important;
   height: auto !important;

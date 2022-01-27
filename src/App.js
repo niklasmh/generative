@@ -3,8 +3,33 @@ import * as Projects from "./projects";
 import { Switch, Route, Link, useParams, useHistory } from "react-router-dom";
 import { useEffect, useState } from "react";
 
+const projectsWithThumbnails = [
+  "CornellBox",
+  "CornellBoxFisheye",
+  "Earth",
+  "GlassEffect",
+  "Planet",
+  "RayTracing",
+  "SolarSystem",
+];
+
 function ProjectList({ seed }) {
   const isFinished = (project) => !!Projects[project].prototype.finished;
+  const renderProject = (project) => {
+    const Project = Projects[project];
+    return (
+      <div key={project} className="list-element">
+        <Link to={fromPascalCaseToKebab(project) + "/" + seed}>
+          <span className="list-element-name">{Project.prototype.name}</span>
+          {projectsWithThumbnails.includes(project) ? (
+            <img src={`/previews/${project}.png`} className="preview" />
+          ) : (
+            <Project name={Project.prototype.name} fileName={project} width={200} height={200} seed={seed} noDownload />
+          )}
+        </Link>
+      </div>
+    );
+  };
   return (
     <>
       <h1 className="title">Showcase</h1>
@@ -12,52 +37,14 @@ function ProjectList({ seed }) {
         {Object.keys(Projects)
           .filter((project) => project !== "ProjectWrapper")
           .filter(isFinished)
-          .map((project) => {
-            const Project = Projects[project];
-            return (
-              <div key={project} className="list-element">
-                <Link to={fromPascalCaseToKebab(project) + "/" + seed}>
-                  <span className="list-element-name">
-                    {Project.prototype.name}
-                  </span>
-                  <Project
-                    name={Project.prototype.name}
-                    fileName={project}
-                    width={200}
-                    height={200}
-                    seed={seed}
-                    noDownload
-                  />
-                </Link>
-              </div>
-            );
-          })}
+          .map(renderProject)}
       </div>
       <h1 className="title">Experimental</h1>
       <div className="list">
         {Object.keys(Projects)
           .filter((project) => project !== "ProjectWrapper")
           .filter((project) => !isFinished(project))
-          .map((project) => {
-            const Project = Projects[project];
-            return (
-              <div key={project} className="list-element">
-                <Link to={fromPascalCaseToKebab(project) + "/" + seed}>
-                  <span className="list-element-name">
-                    {Project.prototype.name}
-                  </span>
-                  <Project
-                    name={Project.prototype.name}
-                    fileName={project}
-                    width={200}
-                    height={200}
-                    seed={seed}
-                    noDownload
-                  />
-                </Link>
-              </div>
-            );
-          })}
+          .map(renderProject)}
       </div>
     </>
   );
@@ -95,14 +82,8 @@ function Project({ seed, setSeed = () => {} }) {
   return (
     <div>
       <h1>{Component.prototype.name || pascalCaseName}</h1>
-      {Component.prototype.description ? (
-        <p>{Component.prototype.description}</p>
-      ) : null}
-      <Component
-        seed={seed}
-        name={Component.prototype.name}
-        fileName={pascalCaseName}
-      />
+      {Component.prototype.description ? <p>{Component.prototype.description}</p> : null}
+      <Component seed={seed} name={Component.prototype.name} fileName={pascalCaseName} />
     </div>
   );
 }
@@ -164,9 +145,7 @@ function App() {
         </Route>
         <Route path="/:name/:seed?">
           <Link to="/">Home</Link>
-          {seed === -1 ? null : (
-            <Project seed={seed} setSeed={(seed) => setSeed(seed)} />
-          )}
+          {seed === -1 ? null : <Project seed={seed} setSeed={(seed) => setSeed(seed)} />}
         </Route>
       </Switch>
     </div>

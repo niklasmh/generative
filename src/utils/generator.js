@@ -1,3 +1,23 @@
+export function random_hash(seed) {
+  let x = "0123456789abcdef",
+    hash = "0x";
+  for (let i = 64; i > 0; --i) {
+    hash += x[Math.floor(Math.random() * x.length)];
+  }
+  return hash;
+}
+const hash = random_hash();
+let seed = parseInt(hash.slice(0, 16), 16);
+export function rnd() {
+  seed ^= seed << 13;
+  seed ^= seed >> 17;
+  seed ^= seed << 5;
+  return ((seed < 0 ? ~seed + 1 : seed) % 1000) / 1000;
+}
+export const rndr = (a, b) => rnd() * (b - a) + a;
+export const rndi = (a, b) => Math.floor(rndr(a, b));
+export const bin = () => rnd() < 0.5;
+
 export function range(a, b, step = 1, scale = 1) {
   const numbers = [];
   const stepScaled = Math.abs(step * scale);
@@ -64,17 +84,7 @@ export const dottedRect = (x0, y0, w = 1, h = 1, dx = 1, dy = 1) => {
     .flat();
 };
 
-export const dottedBox = (
-  x0,
-  y0,
-  z0,
-  w = 1,
-  h = 1,
-  d = 1,
-  dx = 1,
-  dy = 1,
-  dz = 1
-) => {
+export const dottedBox = (x0, y0, z0, w = 1, h = 1, d = 1, dx = 1, dy = 1, dz = 1) => {
   return dottedRect(x0, y0, w, h, dx, dy)
     .map(([x, y]) => {
       const points = [];
@@ -108,36 +118,20 @@ export const dottedCircle = (
   });
 };
 
-export const dottedSphere = (
-  x0,
-  y0,
-  z0,
-  r = 1,
-  steps = 10,
-  offset = 0,
-  angle = 360,
-  includeAngle = false
-) => {
+export const dottedSphere = (x0, y0, z0, r = 1, steps = 10, offset = 0, angle = 360, includeAngle = false) => {
   const circumference = 360 * r;
   return dottedCircle(0, 0, r, steps / 2, 0, 180, true, includeAngle)
     .map(([z, newR, , v]) => {
       const newCircumference = 360 * newR;
       const newSteps = Math.floor((steps * newCircumference) / circumference);
-      const latitudeCircle = dottedCircle(
-        x0,
-        y0,
-        newR,
-        newSteps,
-        offset,
-        angle,
-        false,
-        includeAngle
-      ).map(([x, y, , u]) => {
-        if (includeAngle) {
-          return [x, y, z0 + z, u, v];
+      const latitudeCircle = dottedCircle(x0, y0, newR, newSteps, offset, angle, false, includeAngle).map(
+        ([x, y, , u]) => {
+          if (includeAngle) {
+            return [x, y, z0 + z, u, v];
+          }
+          return [x, y, z0 + z];
         }
-        return [x, y, z0 + z];
-      });
+      );
       return latitudeCircle;
     })
     .flat();
