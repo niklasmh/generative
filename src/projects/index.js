@@ -2,6 +2,7 @@ export { Project as ClosedBezier } from "./ClosedBezier";
 export { Project as Contrasts } from "./Contrasts";
 export { Project as CornellBox } from "./CornellBox";
 export { Project as CornellBoxFisheye } from "./CornellBoxFisheye";
+export { Project as CornellBoxGpu } from "./CornellBoxGpu";
 export { Project as CurvedFlatSurface } from "./CurvedFlatSurface";
 export { Project as Depth } from "./Depth";
 export { Project as Earth } from "./Earth";

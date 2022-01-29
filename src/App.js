@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 const projectsWithThumbnails = [
   "CornellBox",
   "CornellBoxFisheye",
+  "CornellBoxGpu",
   "Earth",
   "GlassEffect",
   "Planet",
