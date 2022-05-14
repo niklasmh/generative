@@ -37,3 +37,13 @@ export function hexToColor(hex) {
     return [r, g, b, a];
   }
 }
+
+export function hueToColor(deg, alpha = 255) {
+  const phase = (Math.PI * 2) / 3;
+  const amp = 255;
+  const rad = (deg * Math.PI) / 180;
+  const r = 0.5 * (1 + Math.cos(rad)) * amp;
+  const g = 0.5 * (1 + Math.cos(rad + phase * 2)) * amp;
+  const b = 0.5 * (1 + Math.cos(rad + phase)) * amp;
+  return [r, g, b, alpha];
+}
