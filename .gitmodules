@@ -1,3 +1,6 @@
 [submodule "secret"]
 	path = src/projects/secret
 	url = https://github.com/niklasmh/generative.secret.git
+[submodule "public/secret"]
+	path = public/secret
+	url = git@github.com:niklasmh/generative.secret.git
