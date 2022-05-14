@@ -1,0 +1,3 @@
+[submodule "secret"]
+	path = src/projects/secret
+	url = https://github.com/niklasmh/generative.secret.git
