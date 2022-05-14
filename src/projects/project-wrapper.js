@@ -2,6 +2,8 @@ import p5 from "p5";
 import { useCallback, useEffect, useRef } from "react";
 import { Projection } from "../utils/projection";
 
+p5.disableFriendlyErrors = true;
+
 function useRenderSketch(sketch, canvasContainer, seed) {
   useEffect(() => {
     if (canvasContainer) canvasContainer.innerHTML = "";
@@ -18,6 +20,7 @@ function ProjectWrapper({
   name,
   fileName,
   draw,
+  setup,
   preload = null,
   frameRate = 0,
   frames = 0,
@@ -64,10 +67,14 @@ function ProjectWrapper({
         else project.frameRate(frameRate);
         project.angleMode(project.DEGREES);
         project.frame = 0;
+        if (seed >= 0) {
+          project.noiseSeed(seed);
+          project.randomSeed(seed);
+        }
+        if (setup) setup.bind(project)();
       };
 
       const scaleDraw = () => {
-        if (seed >= 0) project.noiseSeed(seed);
         project.scale(width / 100);
         project.translate(50, 50);
         Object.keys(project.__proto__)
@@ -136,10 +143,14 @@ function ProjectWrapper({
         canvas.parent(uniqueIDRef.current + "-hidden");
         project.noLoop();
         project.angleMode(project.DEGREES);
+        if (seed >= 0) {
+          project.noiseSeed(seed);
+          project.randomSeed(seed);
+        }
+        if (setup) setup.bind(project)();
       };
 
       const scaleDrawThenSave = () => {
-        if (seed >= 0) project.noiseSeed(seed);
         project.scale(finalWidth / 100);
         project.translate(50, 50);
         Object.keys(project.__proto__)
@@ -178,7 +189,7 @@ function ProjectWrapper({
         statusRef.current.innerHTML = "Saving image...";
         setTimeout(() => {
           console.log("Saving image ...");
-          project.save(name + "-" + seed + ".png");
+          project.save(name + "#" + seed + ".png");
           statusRef.current.innerHTML = "Done!";
           console.log("Ferdig!");
           setTimeout(() => {

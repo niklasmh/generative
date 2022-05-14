@@ -54,6 +54,22 @@ export function linspace(a, b, steps = 1, endpoint = false, scale = 1) {
   return numbers;
 }
 
+export const pairwise = (items) => {
+  const pairs = [];
+  for (let i = 0; i < items.length - 1; i++) {
+    pairs.push([items[i], items[i + 1]]);
+  }
+  return pairs;
+};
+
+export const append = (items, item) => {
+  return items.concat([item]);
+};
+
+export const sum = (array, fn = null) => {
+  return (fn ? array.map(fn) : array).reduce((s, item) => s + item, 0);
+};
+
 export const union = (pointArrays) => {
   return pointArrays.flat();
 };

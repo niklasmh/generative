@@ -1,5 +1,6 @@
 import { hexToColor } from "./colors";
 import { Projection } from "./projection";
+import { sum, pairwise, append } from "./generator";
 
 export function lineSphereIntersection(lx1, ly1, lz1, lx2, ly2, lz2, cx, cy, cz, cr, includeNormal = false) {
   const vx = lx2 - lx1;
@@ -195,6 +196,30 @@ export function rotateVectorAroundAxis(vx, vy, vz, rx, ry, rz, theta) {
     vz * cos + vxrz * sin + nrz * vdotr * (1 - cos),
   ];
 }
+
+export function getCOM(points) {
+  const pairs = pairwise(append(points, points[0]));
+  const A6 = sum(pairs, ([p1, p2]) => p1[0] * p2[1] - p2[0] * p1[1]) * (6 / 2);
+  const Cx = sum(pairs, ([p1, p2]) => (p1[0] + p2[0]) * (p1[0] * p2[1] - p2[0] * p1[1])) / A6;
+  const Cy = sum(pairs, ([p1, p2]) => (p1[1] + p2[1]) * (p1[0] * p2[1] - p2[0] * p1[1])) / A6;
+
+  return [Cx, Cy];
+}
+
+export function getAABB(points) {
+  const Px = points.map((p) => p[0]);
+  const Py = points.map((p) => p[1]);
+  return { min: [Math.min(...Px), Math.min(...Py)], max: [Math.max(...Px), Math.max(...Py)] };
+}
+
+export const closedBezier = (points) => {
+  beginShape();
+  curveVertex(...points[points.length - 1]);
+  points.forEach((point) => curveVertex(...point));
+  curveVertex(...points[0]);
+  curveVertex(...points[1]);
+  endShape();
+};
 
 function parseColor(color) {
   if (typeof color === "string") {
