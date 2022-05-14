@@ -99,9 +99,6 @@ function Project({ seed, setSeed = () => {} }) {
 
   return (
     <div>
-<<<<<<< HEAD
-      <h1>{Component.prototype.name || pascalCaseName}</h1>
-=======
       <Helmet>
         <title>
           {title}#{"" + seed} | Generative art
@@ -109,7 +106,6 @@ function Project({ seed, setSeed = () => {} }) {
         <meta name="description" content={`${title}#${seed} by Niklas M. Hole`} />
       </Helmet>
       <h1>{title}</h1>
->>>>>>> 087e04c... Add react helmet
       {Component.prototype.description ? <p>{Component.prototype.description}</p> : null}
       <Component seed={seed} name={Component.prototype.name} fileName={pascalCaseName} />
     </div>
