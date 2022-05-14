@@ -17,37 +17,25 @@ const projectsWithThumbnails = [
 ];
 
 function ProjectList({ seed }) {
-<<<<<<< HEAD
-  const isFinished = (project) => !!Projects[project].prototype.finished;
-  const renderProject = (project) => {
-=======
   const isNFT = (project) => !!Projects[project].prototype.nft;
   const isShowcase = (project) => !!Projects[project].prototype.finished && !isNFT(project);
 
   const renderProjectItem = (project) => {
->>>>>>> 087e04c... Add react helmet
     const Project = Projects[project];
     return (
       <div key={project} className="list-element">
         <Link to={fromPascalCaseToKebab(project) + "/" + seed}>
           <span className="list-element-name">{Project.prototype.name}</span>
-<<<<<<< HEAD
           {projectsWithThumbnails.includes(project) ? (
             <img src={`/previews/${project}.png`} className="preview" />
           ) : (
             <Project name={Project.prototype.name} fileName={project} width={200} height={200} seed={seed} noDownload />
           )}
-=======
-          <Project name={Project.prototype.name} fileName={project} width={200} height={200} seed={seed} noDownload />
->>>>>>> 087e04c... Add react helmet
         </Link>
       </div>
     );
   };
-<<<<<<< HEAD
-=======
 
->>>>>>> 087e04c... Add react helmet
   return (
     <>
       <Helmet>
@@ -65,25 +53,15 @@ function ProjectList({ seed }) {
       <div className="list">
         {Object.keys(Projects)
           .filter((project) => project !== "ProjectWrapper")
-<<<<<<< HEAD
-          .filter(isFinished)
-          .map(renderProject)}
-=======
           .filter(isShowcase)
           .map(renderProjectItem)}
->>>>>>> 087e04c... Add react helmet
       </div>
       <h1 className="title">Experimental</h1>
       <div className="list">
         {Object.keys(Projects)
           .filter((project) => project !== "ProjectWrapper")
-<<<<<<< HEAD
-          .filter((project) => !isFinished(project))
-          .map(renderProject)}
-=======
           .filter((project) => !isShowcase(project) && !isNFT(project))
           .map(renderProjectItem)}
->>>>>>> 087e04c... Add react helmet
       </div>
     </>
   );
